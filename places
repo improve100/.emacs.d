@@ -1,0 +1,7 @@
+;;; -*- coding: utf-8 -*-
+(("/home/maxsense/3rdparty/elegant-emacs/sanity.el" . 1433)
+ ("/home/maxsense/3rdparty/elegant-emacs/Welcome.org" . 4571)
+ ("/home/maxsense/3rdparty/elegant-emacs/Splash.org" . 235)
+ ("/home/maxsense/3rdparty/elegant-emacs/"
+  (dired-filename . "/home/maxsense/3rdparty/elegant-emacs/elegance.el"))
+ ("/home/maxsense/3rdparty/elegant-emacs/elegance.el" . 14443))

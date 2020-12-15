@@ -1,0 +1,565 @@
+;;; -*- coding: utf-8 -*-
+(("/home/maxsense/SparkleShare/mynotes/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/ros"))
+ ("/home/maxsense/SparkleShare/mynotes/ros/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/ros/gnss"))
+ ("/home/maxsense/SparkleShare/mynotes/ros/gnss/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/ros/gnss/novatel常用命令整理.org"))
+ ("/home/maxsense/SparkleShare/mynotes/ros/gnss/novatel常用命令整理.org" . 2213)
+ ("/home/maxsense/.spacemacs.d/layout/persp-auto-save" . 1720)
+ ("/home/maxsense/.emacs.d/.cache/recentf" . 106567)
+ ("/home/maxsense/SparkleShare/mynotes/GTD/2020_task.org" . 50)
+ ("/home/maxsense/SparkleShare/mynotes/emacs/org_table.org" . 340)
+ ("/home/maxsense/SparkleShare/mynotes/ros/gnss/gnss常识.org" . 237)
+ ("/home/maxsense/SparkleShare/mynotes/ubuntu/awesome.org" . 850)
+ ("/home/maxsense/SparkleShare/mynotes/cmake/cmake升级.org" . 31)
+ ("/home/maxsense/SparkleShare/mynotes/ros/gnss/rtklib.org" . 736)
+ ("/home/maxsense/SparkleShare/mynotes/qt/main.cpp" . 25)
+ ("/home/maxsense/SparkleShare/mynotes/pcl/main.cpp" . 158)
+ ("/home/maxsense/SparkleShare/mynotes/pcl/pclwindow.ui" . 7039)
+ ("/home/maxsense/SparkleShare/mynotes/qt/mainwindow.h" . 227)
+ ("/home/maxsense/SparkleShare/mynotes/pcl/Makefile" . 2166)
+ ("/home/maxsense/SparkleShare/mynotes/pcl/CMakeLists.txt" . 525)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/localization_batch_test/localization_batch_test.h" . 1101)
+ ("/home/maxsense/SparkleShare/mynotes/qt/mainwindow.org" . 374)
+ ("/home/maxsense/SparkleShare/mynotes/qt/qt_install.org" . 488)
+ ("/home/maxsense/SparkleShare/mynotes/GTD/chrome.org" . 9742)
+ ("/home/maxsense/SparkleShare/mynotes/GTD/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/GTD/chrome.org"))
+ ("/home/maxsense/SparkleShare/mynotes/ros/pcl_ros.org" . 409)
+ ("/home/maxsense/SparkleShare/mynotes/GTD/2019_task.org" . 20)
+ ("/home/maxsense/codes/autonomous_driving/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/src"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/src/rawdata.cc" . 28676)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/src/rawdata.cc"))
+ ("/home/maxsense/SparkleShare/mynotes/pcl/pcl_common.org" . 1207)
+ ("/home/maxsense/SparkleShare/mynotes/qt/qstring.org" . 1333)
+ ("/home/maxsense/SparkleShare/mynotes/qt/file.org" . 507)
+ ("/home/maxsense/SparkleShare/mynotes/pcl/pclwindow.org" . 2409)
+ ("/home/maxsense/SparkleShare/mynotes/pcl/ui_pclwindow.h" . 995)
+ ("/home/maxsense/SparkleShare/mynotes/qt/button.org" . 421)
+ ("/home/maxsense/SparkleShare/mynotes/qt/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/qt/qtextedit.org"))
+ ("/home/maxsense/SparkleShare/mynotes/qt/qtextedit.org" . 556)
+ ("/home/maxsense/SparkleShare/mynotes/python/quaternion_t.py" . 20)
+ ("/home/maxsense/SparkleShare/mynotes/python/pip_使用国内镜像源.org" . 384)
+ ("/home/maxsense/SparkleShare/mynotes/deeplearning/tensorflow/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/deeplearning/tensorflow/.."))
+ ("/home/maxsense/3rdparty/"
+  (dired-filename . "/home/maxsense/3rdparty/overlap_localization"))
+ ("/home/maxsense/SparkleShare/mynotes/pcl/pclwindow.cpp" . 12442)
+ ("/home/maxsense/3rdparty/overlap_localization/src/initialization.py" . 189)
+ ("/home/maxsense/3rdparty/overlap_localization/src/motion_model.py" . 4255)
+ ("/home/maxsense/3rdparty/overlap_localization/src/prepare_training/"
+  (dired-filename . "/home/maxsense/3rdparty/overlap_localization/src/prepare_training/.."))
+ ("/home/maxsense/3rdparty/overlap_localization/OverlapNet/src/two_heads/infer.py" . 762)
+ ("/home/maxsense/3rdparty/overlap_localization/OverlapNet/src/two_heads/ImagePairOverlapOrientationSequence.py" . 247)
+ ("/home/maxsense/3rdparty/overlap_localization/src/fast_infer.py" . 805)
+ ("/home/maxsense/3rdparty/overlap_localization/OverlapNet/src/two_heads/FeatureVolumeCacheSequence.py" . 487)
+ ("/home/maxsense/SparkleShare/mynotes/emacs/spacemacs_op.org" . 321)
+ ("/home/maxsense/SparkleShare/mynotes/emacs/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/emacs/spacemacs_op.org"))
+ ("/home/maxsense/3rdparty/overlap_localization/src/visualizer.py" . 1317)
+ ("/home/maxsense/3rdparty/overlap_localization/data/"
+  (dired-filename . "/home/maxsense/3rdparty/overlap_localization/data/.."))
+ ("/home/maxsense/3rdparty/overlap_localization/config/localization.yml" . 4118)
+ ("/home/maxsense/3rdparty/overlap_localization/config/prepare_training.yml" . 1613)
+ ("/home/maxsense/3rdparty/overlap_localization/config/"
+  (dired-filename . "/home/maxsense/3rdparty/overlap_localization/config/.."))
+ ("/home/maxsense/3rdparty/overlap_localization/OverlapNet/src/two_heads/"
+  (dired-filename . "/home/maxsense/3rdparty/overlap_localization/OverlapNet/src/two_heads/training.py"))
+ ("/home/maxsense/3rdparty/overlap_localization/OverlapNet/src/"
+  (dired-filename . "/home/maxsense/3rdparty/overlap_localization/OverlapNet/src/two_heads"))
+ ("/home/maxsense/3rdparty/overlap_localization/OverlapNet/demo/demo1_gen_data.py" . 2316)
+ ("/home/maxsense/3rdparty/overlap_localization/OverlapNet/demo/"
+  (dired-filename . "/home/maxsense/3rdparty/overlap_localization/OverlapNet/demo/.."))
+ ("/home/maxsense/3rdparty/overlap_localization/OverlapNet/"
+  (dired-filename . "/home/maxsense/3rdparty/overlap_localization/OverlapNet/demo"))
+ ("/home/maxsense/3rdparty/overlap_localization/src/utils.py" . 486)
+ ("/home/maxsense/3rdparty/overlap_localization/src/sensor_model_overlap.py" . 638)
+ ("/home/maxsense/3rdparty/overlap_localization/src/"
+  (dired-filename . "/home/maxsense/3rdparty/overlap_localization/src/utils.py"))
+ ("/home/maxsense/3rdparty/overlap_localization/"
+  (dired-filename . "/home/maxsense/3rdparty/overlap_localization/requirements.txt"))
+ ("/home/maxsense/SparkleShare/mynotes/python/yaml.org" . 224)
+ ("/home/maxsense/SparkleShare/mynotes/pcl/pcl_console.org" . 72)
+ ("/home/maxsense/SparkleShare/mynotes/pcl/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/pcl/pcl_console.org"))
+ ("/home/maxsense/SparkleShare/mynotes/python/ros_python_install.org" . 58)
+ ("/home/maxsense/SparkleShare/mynotes/ubuntu/new_day.org" . 2197)
+ ("/home/maxsense/SparkleShare/mynotes/ubuntu/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/ubuntu/new_day.org"))
+ ("/home/maxsense/SparkleShare/mynotes/python/python_install.org" . 283)
+ ("/home/maxsense/3rdparty/overlap_localization/src/main_overlap_mcl.py" . 224)
+ ("/home/maxsense/SparkleShare/mynotes/deeplearning/keras/keras运行出错.org" . 396)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/localization_batch_test/localization_batch_test.cpp" . 4620)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/localization_batch_test/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/localization_batch_test/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/localization_batch_test"))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src"))
+ ("/home/maxsense/codes/autonomous_driving/src/system/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins"))
+ ("/home/maxsense/SparkleShare/mynotes/python/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/python/matplotlib.org"))
+ ("/home/maxsense/SparkleShare/mynotes/python/matplotlib.org" . 3421)
+ ("/home/maxsense/SparkleShare/mynotes/deeplearning/keras/keras直线拟合.org" . 1404)
+ ("/home/maxsense/SparkleShare/mynotes/go/go install.org" . 251)
+ ("/home/maxsense/SparkleShare/mynotes/go/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/go/.."))
+ ("/home/maxsense/SparkleShare/mynotes/deeplearning/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/deeplearning/keras"))
+ ("/home/maxsense/SparkleShare/mynotes/deeplearning/keras/keras手写数字识别.org" . 24486)
+ ("/home/maxsense/SparkleShare/mynotes/deeplearning/keras/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/deeplearning/keras/keras_install.org"))
+ ("/home/maxsense/SparkleShare/mynotes/deeplearning/keras/keras_install.org" . 545)
+ ("/home/maxsense/.emacs.d/.cache/treemacs-persist" . 62)
+ ("/home/maxsense/SparkleShare/mynotes/MAXSENSE/11730976.html" . 1784)
+ ("/home/maxsense/3rdparty/rtklib_2.4.2/"
+  (dired-filename . "/home/maxsense/3rdparty/rtklib_2.4.2/app"))
+ ("/home/maxsense/3rdparty/rtklib_2.4.2/app/"
+  (dired-filename . "/home/maxsense/3rdparty/rtklib_2.4.2/app/rtknavi"))
+ ("/home/maxsense/3rdparty/rtklib_2.4.2/app/rtknavi/mapdlg.cpp" . 109)
+ ("/home/maxsense/3rdparty/rtklib_2.4.2/app/appcmn/tcpoptdlg.cpp" . 1498)
+ ("/home/maxsense/3rdparty/rtklib_2.4.2/app/rtkrcv/rtkrcv.c" . 59174)
+ ("/home/maxsense/SparkleShare/mynotes/C/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/C/.empty"))
+ ("/home/maxsense/SparkleShare/mynotes/C/__stdcall，__cdecl，__pascal，__fastcall的区别.org" . 1090)
+ ("/home/maxsense/3rdparty/rtklib_2.4.2/app/rtknavi/rtknavi.cpp" . 1143)
+ ("/home/maxsense/3rdparty/rtklib_2.4.2/app/rtknavi/navimain.dfm" . 465)
+ ("/home/maxsense/SparkleShare/mynotes/windows/windows编程.org" . 7269)
+ ("/home/maxsense/SparkleShare/mynotes/windows/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/windows/windows编程.org"))
+ ("/home/maxsense/SparkleShare/mynotes/ubuntu/v2rayL_install.org" . 176)
+ ("/home/maxsense/SparkleShare/mynotes/git/git国内加速.org" . 188)
+ ("/home/maxsense/SparkleShare/mynotes/git/git-check.org" . 225)
+ ("/home/maxsense/SparkleShare/mynotes/git/git-tag.org" . 41)
+ ("/home/maxsense/SparkleShare/mynotes/git/git拉取github上别人的PR.org" . 157)
+ ("/home/maxsense/SparkleShare/mynotes/git/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/git/git拉取github上别人的PR.org"))
+ ("/home/maxsense/SparkleShare/mynotes/mathematics/SLAM最小二乘问题问题.org" . 7725)
+ ("/home/maxsense/3rdparty/rtklib_2.4.2/app/rtknavi/"
+  (dired-filename . "/home/maxsense/3rdparty/rtklib_2.4.2/app/rtknavi/install.bat"))
+ ("/home/maxsense/SparkleShare/mynotes/emacs/pcd_useage.org" . 14)
+ ("/home/maxsense/3rdparty/rtklib_2.4.2/app/rtknavi/navimain.cpp" . 54722)
+ ("/home/maxsense/SparkleShare/mynotes/emacs/org_shell.org" . 470)
+ ("/home/maxsense/SparkleShare/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes"))
+ ("/home/"
+  (dired-filename . "/home/maxsense"))
+ ("/home/maxsense/"
+  (dired-filename . "/home/maxsense/codes"))
+ ("/home/maxsense/codes/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving"))
+ ("/home/maxsense/codes/autonomous_driving/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src"))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/CMakeLists.txt" . 4095)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_ros_utility/CMakeLists.txt" . 306)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_ros_utility/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_ros_utility/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/common/ros/.."))
+ ("/home/maxsense/SparkleShare/mynotes/qt/mainwindow.ui" . 59)
+ ("/home/maxsense/codes/autonomous_driving/src/common/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/common/ros"))
+ ("/home/maxsense/SparkleShare/mynotes/qt/mainwindow.cpp" . 259)
+ ("/home/maxsense/SparkleShare/mynotes/qt/Makefile" . 1818)
+ ("/home/maxsense/SparkleShare/mynotes/qt/ui_mainwindow.h" . 3702)
+ ("/home/maxsense/SparkleShare/mynotes/qt/test.cpp" . 36)
+ ("/home/maxsense/SparkleShare/mynotes/pcl/.gitignore" . 63)
+ ("/home/maxsense/SparkleShare/mynotes/qt/.gitignore" . 49)
+ ("/home/maxsense/SparkleShare/mynotes/c++/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/c++/glog使用.org"))
+ ("/home/maxsense/SparkleShare/mynotes/mathematics/RTKLIBSPPWithoutSBSwithoutSBAS求解方法整理.org" . 53)
+ ("/home/maxsense/SparkleShare/mynotes/c++/glog使用.org" . 1076)
+ ("/home/maxsense/SparkleShare/mynotes/mathematics/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/mathematics/RTKLIBSPPWithoutSBSwithoutSBAS求解方法整理.org"))
+ ("/home/maxsense/SparkleShare/mynotes/qt/moc_mainwindow.cpp" . 136)
+ ("/home/maxsense/SparkleShare/mynotes/pcl/test.cpp" . 151)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/localization_status/localization_status.h" . 1887)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/src/ros_filter.cpp"))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/scripts/localization_bags_autotest_touran.py" . 14520)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/scripts/localization_bags_autotest_dumper.py" . 598)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/scripts/localization_bags_autotest_brt95e.py" . 2018)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/include/ms_localization_msf/vehicle_velocity_filter.h" . 1808)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/include/ms_localization_msf/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/include/ms_localization_msf/ros_filter_params.h"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/include/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/include/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/src/localization_initial_node.cc" . 7883)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/src/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/launch/localization_initial.launch" . 3023)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/launch/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib/src"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib/src/segmap_server.cc"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib/src/segmap_server.cc" . 9526)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/src/segmap_server_node.cc" . 4931)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/src/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/.."))
+ ("/home/maxsense/SparkleShare/mynotes/emacs/org-bullets-list-collects.org" . 1229)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/localization_status/localization_status.cpp" . 4993)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/localization_status/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/localization_status/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/car_panel/car_panel.h" . 2915)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/src/ros_filter.cpp" . 85409)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/launch/localization_debug_tractor_new_xwyd.launch" . 105)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/launch/localization_debug_dumper_new_xwyd.launch" . 1084)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher/launch/start_breton_dynamics_publisher.launch" . 1092)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher/launch/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher/launch"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros"))
+ ("/home/maxsense/SparkleShare/mynotes/python/argparse.org" . 1082)
+ ("/home/maxsense/SparkleShare/mynotes/python/list.org" . 361)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/car_panel/car_panel.cpp" . 7977)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/car_panel/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/car_panel/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/launch/touran_lidars_time_sync_TF.launch"))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/launch/localization_debug_brt95e_new_xwyd.launch" . 10)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/launch/localization_debug_touran_new_xwyd.launch" . 4237)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/launch/localization_debug_touran_new_xwyd.launch"))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/scripts/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/scripts/localization_bags_autotest.py"))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/scripts/localization_bags_autotest.py" . 10947)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/plugin_description.xml" . 3537)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/drive_decision_panel/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/src/drive_decision_panel/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/icons/classes/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/icons/classes/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/icons/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/icons/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/media/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/media/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/qt_resources/images/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/qt_resources/images/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/qt_resources/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/qt_resources/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/CMakeLists.txt" . 2000)
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_vehicle_rviz_plugins/package.xml" . 1359)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/nodes/xwyd_topic_driver.cpp" . 6463)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/nodes/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/nodes/xwyd_topic_driver.cpp"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/nodes"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib/include/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib/include/ms_localization_segmap_server_lib"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib/include/ms_localization_segmap_server_lib/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib/include/ms_localization_segmap_server_lib/segmap_server.hh"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_segmap_server_lib/include/ms_localization_segmap_server_lib/segmap_server.hh" . 1502)
+ ("/home/maxsense/SparkleShare/mynotes/c++/c++11新特性.org" . 149)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/include/segmap_server_node_params.hh" . 649)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/include/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/include/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/launch/diag_localization_ndt.yaml" . 12)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/include/ndt_node.hh" . 3626)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/launch/segmap_server.launch" . 1605)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/launch/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/launch/ndt.launch" . 4088)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/launch/ndt_orig.launch"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/launch/ndt_orig.launch" . 4126)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/include/ndt_node_params.hh" . 1480)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/include/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/include/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/src/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/src/ndt_node.cc" . 28832)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/params/msf_2ekf.yaml" . 12482)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/params/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/params/msf_2ekf.yaml"))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_msgs/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_msgs/msg"))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_msgs/msg/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_msgs/msg/VehicleStatus.msg"))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_msgs/msg/VehicleStatus.msg" . 1631)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/include/ms_localization_msf_lib/ekf.h" . 1640)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/src/filter_base.cpp" . 15664)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/include/ms_localization_msf_lib/filter_base.h" . 18868)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/include/ms_localization_msf_lib/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/include/ms_localization_msf_lib/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/include/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/include/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/include/ms_localization_msf/msf_status.hpp" . 5766)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/include/ms_localization_msf/ros_filter.h" . 30425)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/src/ekf.cpp" . 9027)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/src/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/src"))
+ ("/home/maxsense/SparkleShare/mynotes/ros/msf调试日记.org" . 3332)
+ ("/home/maxsense/.emacs.d/.cache/url/cookies" . 231)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/rviz/ms_common_vis_road_map/CMakeLists.txt" . 846)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/rviz/ms_common_vis_road_map/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/common/ros/rviz/ms_common_vis_road_map/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/rviz/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/common/ros/rviz/ms_common_vis_road_map"))
+ ("/home/maxsense/SparkleShare/mynotes/c++/c++_time.org" . 453)
+ ("/home/maxsense/SparkleShare/mynotes/eigen/eigen_org.org" . 3646)
+ ("/home/maxsense/SparkleShare/mynotes/eigen/eigen_print.cpp" . 1293)
+ ("/home/maxsense/SparkleShare/mynotes/eigen/eigen_tutorial.cpp" . 82)
+ ("/home/maxsense/SparkleShare/mynotes/eigen/eigen_op.org" . 5577)
+ ("/home/maxsense/SparkleShare/mynotes/eigen/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/eigen/eigen_geometry_op.org"))
+ ("/home/maxsense/SparkleShare/mynotes/eigen/eigen_geometry_op.org" . 3120)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/launch/combine_odom.launch" . 4136)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/launch/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/include/combine_odom.hh" . 5065)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/include/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/include/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/src"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/src/combine_odom.cc"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_rtk/src/combine_odom.cc" . 19977)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/launch/msf_2ekf.launch" . 3307)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/launch/.."))
+ ("/home/maxsense/.emacs.d/.cache/.custom-settings" . 271)
+ ("/home/maxsense/.spacemacs.d/"
+  (dired-filename . "/home/maxsense/.spacemacs.d/init.el"))
+ ("/home/maxsense/.spacemacs.d/init.el" . 3379)
+ ("/tmp/"
+  (dired-filename . "/tmp/.."))
+ ("/home/maxsense/SparkleShare/mynotes/GTD/work/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/GTD/work/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_msgs/msg/GNSS.msg" . 44)
+ ("/home/maxsense/SparkleShare/mynotes/emacs/elisp.org" . 26)
+ ("/home/maxsense/SparkleShare/mynotes/emacs/elisp_学习.org" . 20667)
+ ("/home/maxsense/SparkleShare/mynotes/emacs/magit_op.org" . 45)
+ ("/home/maxsense/SparkleShare/mynotes/emacs/images/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/emacs/images/.."))
+ ("/home/maxsense/SparkleShare/mynotes/emacs/image/"
+  (dired-filename . "/home/maxsense/SparkleShare/mynotes/emacs/image/arch-plant.png"))
+ ("/home/maxsense/.emacs.d/.cache/layouts/persp-auto-save" . 9123)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/src/init_guess_estimator.cpp" . 5382)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/ms_perception_object_track_lib/CMakeLists.txt" . 2583)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/ms_perception_object_track_lib/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/logic/ms_perception_object_track_lib/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/logic/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_breton_dumper_control/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/system/ms_breton_dumper_control/start_zhanpeng.sh"))
+ ("/home/maxsense/codes/autonomous_driving/src/system/ms_breton_dumper_control/start_zhanpeng.sh" . 4287)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_segmap_server/include/segmap_server_node.hh" . 2374)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/src/ros_filter_utilities.cpp" . 662)
+ ("/media/maxsense/"
+  (dired-filename . "/media/maxsense/6605124a-f3c6-4ee5-97f8-0f616f6890f0"))
+ ("/media/"
+  (dired-filename . "/media/maxsense"))
+ ("/"
+  (dired-filename . "/home"))
+ ("/home/maxsense/python3_env/"
+  (dired-filename . "/home/maxsense/python3_env/.."))
+ ("/home/maxsense/python3_env/hello.py" . 21)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/nodes/xwyd_imu_remove_gravity.cpp" . 7347)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_ndt/include/init_guess_estimator.h" . 4438)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/src/localization_initial_main.cc" . 436)
+ ("/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_msgs/msg/LocalizationStatus.msg" . 383)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/msf.rviz" . 355)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/include/localization_initial_node.hh" . 5934)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/include/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_initial/include/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher/scripts/ms_localization_dynamics_publisher/vehicle_dynamics_publisher.py" . 3830)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher/scripts/ms_localization_dynamics_publisher/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher/scripts/ms_localization_dynamics_publisher/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher/scripts/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_dynamics_publisher/scripts/.."))
+ ("/home/maxsense/tmp/helloglog.cpp" . 323)
+ ("/home/maxsense/tmp/"
+  (dired-filename . "/home/maxsense/tmp/helloglog.cpp"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/src/msf_preprocess_main.cc" . 22900)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/launch/imu_gnss_fusion.launch" . 606)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/launch/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/include/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/include/imu_gnss_fusion"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/include/imu_gnss_fusion/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/include/imu_gnss_fusion/utils.h"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/CMakeLists.txt" . 4713)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/include/imu_gnss_fusion/utils.h" . 270)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/CMakeLists.txt" . 829)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/src"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/src/imu_gnss_fusion_node.cpp"))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/src/filter_utilities.cpp" . 2195)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/src/imu_gnss_fusion_node.cpp" . 785)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/include/imu_gnss_fusion/kf.h" . 949)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg/NovatelDualAntennaHeading.msg"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/scripts/folium_csv.py" . 59)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/scripts/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/scripts/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg/NovatelDualAntennaHeading.msg" . 435)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/package.xml" . 1655)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/package.xml" . 2844)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/include/ms_localization_msf/ros_filter_utilities.h" . 4163)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/include/ms_localization_msf_lib/filter_utilities.h" . 823)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_msf_lib/include/ms_localization_msf_lib/filter_common.h" . 1258)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/nodelets/novatel_gps_nodelet.cpp" . 15389)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/nodelets/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/nodelets/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/novatel_gps.cpp"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src"))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/nmea_navsat_driver/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/nmea_navsat_driver/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/launch/breton_dumper_xwyd_gnss.launch" . 588)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/launch/breton_tractor_xwyd_gnss.launch" . 811)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/launch/gnss_common.launch" . 157)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/launch/gnss_debug.launch" . 11)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/launch/gnss.launch" . 481)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/launch/breton_brt95e_xwyd_gnss.launch" . 1393)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/launch/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/launch/touran_xwyd_gnss.launch" . 499)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg/NovatelHeading2.msg" . 898)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/CMakeLists.txt" . 65)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/launch/tester_for_usb.launch" . 90)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/launch/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/novatel_gps_driver/parsers/bestpos.h" . 2052)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/novatel_gps_driver/parsers/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/novatel_gps_driver/parsers/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg/Gpgga.msg" . 98)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/novatel_message_extractor.cpp" . 20953)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/CMakeLists.txt" . 286)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/novatel_gps_driver/novatel_gps.h" . 9942)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/novatel_gps_driver/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/novatel_gps_driver/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/novatel_gps.cpp" . 43788)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/parsers/bestpos.cpp" . 2497)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/novatel_gps_driver/nmea_sentence.h" . 927)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/novatel_gps_driver/novatel_sentence.h" . 2088)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/parsers/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/parsers/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/novatel_gps_driver/novatel_message_extractor.h" . 4300)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/include/novatel_gps_driver/binary_message.h" . 927)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg/NovatelPosition.msg" . 645)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/nmea_navsat_driver/launch/nmea_serial_driver.launch" . 779)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/nmea_navsat_driver/launch/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/nmea_navsat_driver/launch/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/package.xml" . 79)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/src/msf_ekf_main.cc" . 631)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/src/convert.cc" . 8848)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/src/convert.h" . 1084)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/gnss_localizer/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/gnss_localizer/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/hdl_localization/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/hdl_localization/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/mapsegment/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/mapsegment/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_initial_lib/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ms_localization_initial_lib/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/ndt_gpu/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/logic/ndt_gpu/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/scripts/msf_debug_plot.py" . 2464)
+ ("/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/scripts/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/localization/ros/ms_localization_msf/scripts/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/localization/logic/msf_localization/src/msf_localization_listener_node.cpp" . 362)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/ms_perception_lidar_calibration/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/ros/ms_perception_lidar_calibration/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/CMakeLists.txt" . 977)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/include/lidar_align/loader.h" . 514)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/include/lidar_align/transform.h" . 1252)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/include/lidar_align/aligner.h" . 1629)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/src/loader.cpp" . 3576)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/include/lidar_align/sensors.h" . 1350)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/include/lidar_align/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/include/lidar_align/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/include/"
+  (dired-filename . "/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/include/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/src/lidar_align_node.cpp" . 1640)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/src/sensors.cpp" . 4505)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/third_party/GeographicLib/src/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/third_party/GeographicLib/src/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/third_party/GeographicLib/include/Geocentric/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/third_party/GeographicLib/include/Geocentric/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/third_party/GeographicLib/include/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/third_party/GeographicLib/include/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/third_party/GeographicLib/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/third_party/GeographicLib/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/third_party/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/third_party/.."))
+ ("/home/maxsense/codes/autonomous_driving/src/perception/logic/calibration/lidar_odom_calibration/src/aligner.cpp" . 4716)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/models/registration/ndt_registration.cpp" . 181)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/models/registration/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/models/registration/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/models/cloud_filter/voxel_filter.cpp" . 221)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/models/cloud_filter/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/models/cloud_filter/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/front_end/front_end.cpp" . 8044)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/subscriber/gnss_subscriber.cpp" . 849)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/publisher/odometry_publisher.cpp" . 875)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/tools/file_manager.cpp" . 417)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/tools/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/tools/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/tf_listener/tf_lisener.cpp" . 1415)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/tf_listener/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/tf_listener/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/publisher/cloud_publisher.cpp" . 865)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/publisher/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/publisher/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/sensor_data/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/sensor_data/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/subscriber/imu_subscriber.cpp" . 1493)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/launch/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/launch/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/subscriber/velocity_subscriber.cpp" . 1330)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/test_frame_node.cpp" . 2628)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/subscriber/cloud_subscriber.cpp" . 783)
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/subscriber/"
+  (dired-filename . "/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/subscriber/.."))
+ ("/mnt/05_个人数据/cjtong/localization_in_auto_driving-8.0/lidar_localization/src/front_end_node.cpp" . 757)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/src/cloud_node.cc" . 506)
+ ("/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/rslidar_with_ring/rslidar_pointcloud/launch/touran_trible_lidars_for_calib.launch" . 905)
+ ("/mnt/"
+  (dired-filename . "/mnt/05_个人数据"))
+ ("/mnt/05_个人数据/"
+  (dired-filename . "/mnt/05_个人数据/cjtong")))

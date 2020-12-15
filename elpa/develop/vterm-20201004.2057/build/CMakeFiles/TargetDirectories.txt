@@ -1,0 +1,5 @@
+/home/maxsense/.emacs.d/elpa/develop/vterm-20201004.2057/build/CMakeFiles/rebuild_cache.dir
+/home/maxsense/.emacs.d/elpa/develop/vterm-20201004.2057/build/CMakeFiles/edit_cache.dir
+/home/maxsense/.emacs.d/elpa/develop/vterm-20201004.2057/build/CMakeFiles/run.dir
+/home/maxsense/.emacs.d/elpa/develop/vterm-20201004.2057/build/CMakeFiles/vterm-module.dir
+/home/maxsense/.emacs.d/elpa/develop/vterm-20201004.2057/build/CMakeFiles/libvterm.dir

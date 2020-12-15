@@ -1,0 +1,22 @@
+<launch>
+    <arg name="topic_in_initialpose"                default="/initialpose" />
+    <arg name="topic_in_real_pose"                  default="/odometry/filtered_map" />
+    <arg name="topic_in_real_pose_status"            default="/msf_localization/status" />
+    <arg name="topic_out_segmap"                    default="/segmap" />
+    <arg name="topic_out_segmap_initial"            default="/segmap_initial" />
+    <arg name="node_name"                           value="segmap_server" />
+
+    <arg name="params_downsample_resolution"         default="0.1" />
+
+    <!-- <param name="segmappath" value="$(find ms_localization_segmap_server)/segmap/"/> -->
+    <node name="$(arg node_name)" pkg="ms_localization_segmap_server" type="segmap_server" output="screen">
+        <param name="topics/out/segmap"                    type="str"      value="$(arg topic_out_segmap)" />
+        <param name="topics/out/segmap_initial"            type="str"      value="$(arg topic_out_segmap_initial)" />
+        <param name="topics/in/initialpose"                type="str"      value="$(arg topic_in_initialpose)" />
+        <param name="topics/in/real_pose"                  type="str"      value="$(arg topic_in_real_pose)" />
+        <param name="topics/in/realpose_status"             type="str"      value="$(arg topic_in_real_pose_status)" />
+
+        <param name="params/segmappath"                    type="str"      value="$(env HOME)/codes/Maps/pointcloud_maps/"/>
+        <param name="params/downsample_resolution"         type="double"   value="$(arg params_downsample_resolution)" />
+    </node>
+</launch>

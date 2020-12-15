@@ -1,0 +1,119 @@
+#+STARTUP: showall 
+#+STARTUP: latexpreview
+* 四元数基础知识
+** 外积写成矩阵与向量的乘法\[a^\wedge b\],外积只对三维向量存在定义，我们还把外积表示向量的旋转
+ \[
+ a \times b = 
+ \left|\begin{array}{cccc} 
+     i &    j    & k \\ 
+     a_1 &  a_2   & a_3\\ 
+     b_1 &  b_2 & b_3 
+ \end{array}\right| 
+ = 
+ \left[\begin{array}{cccc} 
+     a_2b_3 - a_3b_2 \\ 
+     a_3b_1 - a_1b_3 \\ 
+     a_1b_2 - a_2b_1
+ \end{array}\right]
+ =
+ \left[\begin{array}{cccc} 
+     0   &  -a_3 &   a_2  \\ 
+     a_3 &  0    &   -a_1 \\ 
+     -a_2 & a_1  &   0  
+ \end{array}\right] b 
+ \triangleq 
+ a^ \wedge b
+ \] 
+
+** 反对称矩阵满足
+ \[
+ (a^\wedge)^2 = a a^T - I
+ \]
+ \[
+ (a^\wedge)^3 = - a^\wedge
+ \]
+
+** 任意旋转矩阵满足
+ \[RR^T = I = R^TR\]
+
+** 向量外积可以表示为反对称矩阵，反之任意反对称矩阵可以找到与之对应的向量
+ \[
+ a^\wedge = A =
+ \left[\begin{array}{cccc} 
+     0   &  -a_3 &   a_2  \\ 
+     a_3 &  0    &   -a_1 \\ 
+     -a_2 & a_1  &   0  
+ \end{array}\right] ,
+ A^\vee = a
+ \]
+
+** 旋转矩阵微分方程解
+ \[
+ R(t) = exp(\phi^\wedge_0 t)
+ \]
+
+** 任意矩阵的指数可以写成一个泰勒展开，但是只有在收敛的情况下才会有结果，其结果仍是一个矩阵,四元数同样满足
+  \[
+ exp(A) = \sum_{n=0}^\infty \frac{1}{n!}A^n , exp(q) = \sum_{n=0}^\infty \frac{1}{n!}q^n
+ \]
+
+** 导出罗格里格斯公式(旋转向量和旋转矩阵之间转换)
+ \[
+ \phi = \theta a
+ \]
+ \[
+ exp(\phi^\wedge) = exp(\theta a^\wedge) = \sum_{n=0}^\infty \frac{1}{n!}(\theta a^\wedge)^n =
+ cos\theta I + (1 - cos\theta)a a^T + sin\theta a^ \wedge
+ \]
+
+** 李代数求导
+ \[
+ \frac{\partial(Rp)}{\partial R} = \frac{\partial(exp(\phi^\wedge)p)}{\partial \phi} = -(Rp)^\wedge J_l = -(Rp)^\wedge
+ \]
+
+
+** 四元数求导
+ \[
+ \dot q \triangleq \lim_{{\Delta t} \to {0}} \frac{q(t+\Delta t)-q(t)}{\Delta t}
+ \]
+ \[
+ = \lim_{{\Delta t} \to {0}} \frac{q \otimes \Delta q_L - q}{\Delta t}
+ \]
+ \[
+ = \frac{1}{2} q \otimes \left[\begin{array}{ccc}
+ 0 \\
+ \omega_L
+ \end{array} \right]
+ \]
+* Error-state kalman
+** 优势
+1. The orientation error-state is minimal (i.e., it has the same number of parameters as degrees of freedom), avoiding issues related to over-parametrization (or redundancy) and the consequent risk of singularity of the involved covariances matrices, resulting typically from enforcing constraints(卡尔曼状态量是小量，可以减少协方差矩阵奇异性风险)
+2. The error-state system is always operating close to the origin, and therefore far from possible parameter singularities, gimbal lock issues, or the like, providing a guarantee that the linearization validity holds at all times(旋转角度也是小量，避免万向锁问题)
+3. The error-state is always small, meaning that all second-order products are negligible. This makes the computation of Jacobians very easy and fast. Some Jacobians may even be constant or equal to available state magnitudes(计算加快计算雅克比矩阵，一些量可以直接使用常数项)
+4. The error dynamics are slow because all the large-signal dynamics have been integrated in the nominal-state. This means that we can apply KF corrections (which are the only means to observe the errors) at a lower rate than the predictions. (误差项变化很慢，更新量可以以低频信号输入)
+
+** 框架
+#+BEGIN_SRC plantuml :file ./image/.png
+  Nominal -> Error : 预测值
+  True -> Error    : 更新
+  Error -> Nominal : 更新后的error
+
+#+END_SRC  
+
+#+RESULTS:
+[[file:./image/.png]]
+
+
+** 运行机制
+
+| Magnitude       | True    | Nominal | Error             | Composition                                                             | Measured | NOise |
+|-----------------+---------+---------+-------------------+-------------------------------------------------------------------------+----------+-------|
+| Full state      | \[x_t\] | \[x\]   | \[\delta t\]      | \[x_t=x\oplus \delta x\]                                                |          |       |
+| Position        | \[p_t\] | \[p\]   | \[\delta p\]      | \[p_t=p+\delta p\]                                                      |          |       |
+| Velocity        | \[v_t\] | \[v\]   | \[\delta v\]      | \[v_t=v+\delta v\]                                                      |          |       |
+| Quaternion      | \[q_t\] | \[q\]   | \[\delta q\]      | \[q_t=q\otimes\delta q\]                                                |          |       |
+| Rotation matrix | \[R_t\] | \[R\]   | \[\delta R\]      | \[R_t=R\delta R\]                                                       |          |       |
+| Angles vector   |         |         | \[\delta \theta\] | \[\delta q = e^{{\delta \theta}/2}\] \[\deltaR = e[\delta \theta]_{x}\] |          |       |
+|                 |         |         |                   |                                                                         |          |       |
+
+

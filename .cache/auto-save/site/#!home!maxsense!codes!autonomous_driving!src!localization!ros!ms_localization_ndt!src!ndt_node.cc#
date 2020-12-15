@@ -1,0 +1,1004 @@
+#include <math.h>
+#include "ndt_node_params.hh"
+#include "ndt_node.hh"
+#include "ms_common_ros_utility/ros_param_loader.hh"
+// #include <std_msgs/String.h>
+#include <pcl/filters/voxel_grid.h>
+// #include <tf_conversions/tf_eigen.h>
+// #include <tf/transform_broadcaster.h>
+// #include <tf/transform_listener.h>
+// #include "diagnostic_msgs/DiagnosticStatus.h"
+// #include "diagnostic_msgs/DiagnosticArray.h"
+// #include "diagnostic_msgs/KeyValue.h"
+
+using namespace maxsense::localization::ndt;
+namespace mpm = maxsense::perception::map_types;
+using PointT = pcl::PointXYZ;
+
+// #define DOUBLE_LIDAR
+
+NdtNode::NdtNode()
+  : RosNode(),
+    real_pose(7),
+    observation(7),
+    // ndt_point_buff(3),
+    // mean_curvature_buff(20),
+    // mean_angle_buff(20),
+    // mean_curvature(0),
+    // mean_angle(M_PI),
+    // last_trans_probability(0.0),
+    veh_start(false),
+    tfListener_(tfBuffer_),
+    initial_guess(60),
+    debug_(false)
+    // debug_(true)
+    // random_distribution_(0., 0.5)
+{
+    try
+    {
+        if (!ReadParameter())
+        {
+            throw std::runtime_error("EXCEPTION failed to load parameters");
+        }
+
+        if (!InitConnection())
+        {
+            throw std::runtime_error("EXCEPTION failed to initialize connection");
+        }
+        segmap_thread_.StartThread(*this, &NdtNode::SegmapThread, 1);//1s
+        diag_info_.setCallbackMode(node_handle_, 1);
+    }
+    catch (const std::exception &ex)
+    {
+        throw std::runtime_error("EXCEPTION Ndt: " + std::string(ex.what()));
+    }
+
+    std::shared_ptr<pcl::VoxelGrid<PointT>> downsample_filter = std::make_shared<pcl::VoxelGrid<PointT>>();
+    downsample_filter->setLeafSize(params_.downsample_resolution,params_.downsample_resolution,params_.downsample_resolution);
+    // downsample_filter.reset(new pcl::octree::OctreePointCloud<PointT>(params_.downsample_resolution));
+
+    registration = std::make_shared<gpu::GNormalDistributionsTransform>();
+    // ndt = new pclomp::NormalDistributionsTransform<PointT, PointT>();
+    registration->setTransformationEpsilon(0.05);
+    registration->setResolution(params_.ndt_resolution);
+    // registration->setStepSize(0.05);
+    // registration->setMaximumIterations(60);
+
+    processing_time.resize(16);
+    is_initial = false;
+    is_map_recv = false;
+    map_.name_ = "ThisMapIsNotInitialized";
+    map_changed_ = false;
+
+    get_rslidar_ego_tf();
+    real_pose << params_.init_pos_x,params_.init_pos_y,params_.init_pos_z,params_.init_ori_w,params_.init_ori_x,params_.init_ori_y,params_.init_ori_z;
+    real_pose_status.status = ms_common_msgs::LocalizationStatus::UNKNOWN;
+
+    LoadPcdConfidence();
+
+    if (debug_) {
+      debugStream_.open("/tmp/ndt_localization_debug.txt");
+    }
+}
+
+NdtNode::~NdtNode()
+{
+}
+
+void NdtNode::LoadPcdConfidence()
+{
+  // path = segmappath;
+  std::string idfile_name = params_.segmappath + "idfile.txt";
+  std::cout << "idfile name:" << idfile_name << std::endl;
+  std::ifstream idfile(idfile_name);
+  std::string line;
+  if (!idfile) {
+    std::cout << "open idfile failed" << std::endl;
+    std::cout << idfile_name << std::endl;
+    exit(-1);
+  }
+  while (std::getline(idfile, line)) {
+    std::istringstream stream(line);
+    int id,x_min, y_min, x_max, y_max;
+    double confidence;
+    stream >> id >> x_min >> y_min >> x_max >> y_max >> confidence;
+    struct PcdConfidence smb {id, x_min, y_min, x_max, y_max, confidence};
+    segmap_array.push_back(smb);
+  }
+  idfile.close();
+  std::cout << "load idfile ok!" << std::endl;
+}
+
+void NdtNode::get_rslidar_ego_tf()
+{
+  bool get_tf = false;
+  while(1)
+  {
+    try{
+      tf2::fromMsg(tfBuffer_.lookupTransform("rslidar", "ego", ros::Time(0), ros::Duration(10)).transform, RslidarEgoTrans);
+    }catch(...){
+      ROS_WARN("cannot lookupTransform rslidar ego");
+      ros::Duration(1.0).sleep();
+      continue;
+    }
+    break;
+    // sleep(1);
+  }
+
+}
+
+bool NdtNode::ReadParameter()
+{
+    try
+    {
+        RosParamLoader loader;
+
+        loader.GetParam(ROS_TOPIC_IN_INITIALPOSE, topics_.in.initialpose);
+        loader.GetParam(ROS_TOPIC_IN_REAL_POSE, topics_.in.real_pose);
+        loader.GetParam(ROS_TOPIC_IN_REAL_POSE_STATUS, topics_.in.real_pose_status);
+        loader.GetParam(ROS_TOPIC_IN_RSLIDAR_POINTS, topics_.in.rslidar_points);
+        loader.GetParam(ROS_TOPIC_IN_SEGMAP, topics_.in.segmap);
+        loader.GetParam(ROS_TOPIC_IN_ROADMAP, topics_.in.roadmap);
+        loader.GetParam(ROS_TOPIC_OUT_NDTODOM, topics_.out.ndtodom);
+        loader.GetParam(ROS_TOPIC_OUT_NDTPOSE, topics_.out.ndtpose);
+        loader.GetParam(ROS_TOPIC_OUT_NDTTEST, topics_.out.ndttest);
+
+        loader.GetParam(ROS_PARAM_DOWNSAMPLE_RESOLUTION, params_.downsample_resolution);
+        loader.GetParam(ROS_PARAM_NDT_RESOLUTION, params_.ndt_resolution);
+        loader.GetParam(ROS_PARAM_SEGMAP_RECV_SEQ, params_.segmap_recv_seq);
+        loader.GetParam(ROS_PARAM_DOUBLE_LIDAR, params_.double_lidar);
+        loader.GetParam(ROS_PARAM_IS_SPECIFY_INIT_POSE, params_.is_specify_init_pose);
+        loader.GetParam(ROS_PARAM_INIT_POS_X, params_.init_pos_x);
+        loader.GetParam(ROS_PARAM_INIT_POS_Y, params_.init_pos_y);
+        loader.GetParam(ROS_PARAM_INIT_POS_Z, params_.init_pos_z);
+        loader.GetParam(ROS_PARAM_INIT_ORI_W, params_.init_ori_w);
+        loader.GetParam(ROS_PARAM_INIT_ORI_X, params_.init_ori_x);
+        loader.GetParam(ROS_PARAM_INIT_ORI_Y, params_.init_ori_y);
+        loader.GetParam(ROS_PARAM_INIT_ORI_Z, params_.init_ori_z);
+        loader.GetParam(ROS_PARAM_USE_ROADMAP_Z, params_.use_roadmap_z);
+        loader.GetParam(ROS_PARAM_SEGMAPPATH, params_.segmappath);
+        loader.GetParam(ROS_PARAM_NDT_DEBUG, debug_);
+
+        loader.GetParam(ROS_OPTION_DISTANCE_NEAR_THRESH, distance_near_thresh);
+        loader.GetParam(ROS_OPTION_DISTANCE_FAR_THRESH, distance_far_thresh);
+        if (loader.ErrorDetected())
+        {
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception &ex)
+    {
+        throw std::runtime_error("EXCEPTION ReadParameter: " + std::string(ex.what()));
+    }
+}
+
+bool NdtNode::InitConnection()
+{
+    try
+    {
+        initial_subscriber_ = node_handle_.subscribe(topics_.in.initialpose, 10, &NdtNode::InitialPoseCallback, this);
+        real_pose_subscriber_ = node_handle_.subscribe(topics_.in.real_pose, 1, &NdtNode::RealPoseCallback, this);
+        real_pose_status_subscriber_ = node_handle_.subscribe(topics_.in.real_pose_status, 1, &NdtNode::RealPoseStatusCallback, this);
+        rslidar_points_subscriber_ = node_handle_.subscribe(topics_.in.rslidar_points, 1, &NdtNode::RslidarPointsCallback, this);
+        roadmap_subscriber_ = node_handle_.subscribe(topics_.in.roadmap, 1, &NdtNode::RoadMapCallback, this);
+
+        node_handle_.setCallbackQueue(&map_callback_queue);
+        segmap_subscriber_ = node_handle_.subscribe(topics_.in.segmap, 2, &NdtNode::SegMapCallback, this);
+
+
+        ndtodom_publisher_ = node_handle_.advertise<nav_msgs::Odometry>(topics_.out.ndtodom, 5);
+        ndtpose_publisher_ = node_handle_.advertise<geometry_msgs::PoseWithCovarianceStamped>(topics_.out.ndtpose, 5);
+        // ndttest_publisher_ = node_handle_.advertise<nav_msgs::Odometry>(topics_.out.ndttest, 5);
+        return true;
+    }
+    catch (const std::exception &ex)
+    {
+        throw std::runtime_error("EXCEPTION InitConnection: " + std::string(ex.what()));
+    }
+}
+
+void NdtNode::SegmapThread()
+{
+  ros::Rate ros_rate(1);
+  while (node_handle_.ok())
+    {
+      map_callback_queue.callAvailable(ros::WallDuration());
+      ros_rate.sleep();
+    }
+
+  // return nullptr;
+}
+
+void NdtNode::SegMapCallback(const sensor_msgs::PointCloud2ConstPtr& points_msg)
+{
+  static int model_pc_num=0;//the same pointcloud segmap
+  // static ros::Time pre_time=ros::Time::now();
+  // if(points_msg->header.stamp-pre_time).toSec()<2
+  // if(points_msg->width<500)
+  // {
+  //   is_map_recv = false;
+  //   return;
+  // }
+
+  // std::cout<<"points_msg->width"<<points_msg->width<<std::endl;
+  // if (((ros::Time::now() - points_msg->header.stamp).toSec()) > 10) {
+  //   ROS_INFO("segmap too old");
+  //   std::cout << "segmap size:" << points_msg->width << std::endl;
+  //   return;
+  // }
+
+  if(model_pc_num == points_msg->width){
+    return;
+  }
+  model_pc_num = points_msg->width;
+
+  if(params_.double_lidar){
+    static bool isfirst = true;
+    static int lidar_num = 2;
+
+    ROS_INFO("segmap received!");
+    std::cout<<"seq:"<<params_.segmap_recv_seq<<std::endl;
+    if(isfirst||params_.segmap_recv_seq==0){
+      // is_map_recv = false;
+      auto t1 = ros::WallTime::now();
+
+      pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>());
+      pcl::fromROSMsg(*points_msg, *cloud);
+      // segmap = downsample(cloud);
+      segmap = cloud;
+      // std::cout<<"seq:"<<params_.segmap_recv_seq<<std::endl;
+      std::cout<<"segmap size:"<<segmap->size()<<std::endl;
+      // pcl::io::savePCDFileASCII("/home/maxsense/tmp/segmap.pcd", *segmap);
+      // registration->setInputTarget(segmap);
+      if(segmap->size()<500){
+        // is_map_recv = false;
+        return;
+      }
+      else{
+
+        std::shared_ptr<gpu::GNormalDistributionsTransform> new_anh_gpu_ndt_ptr = std::make_shared<gpu::GNormalDistributionsTransform>();
+        new_anh_gpu_ndt_ptr->setResolution(params_.ndt_resolution);
+        // new_anh_gpu_ndt_ptr->setMaximumIterations(60);
+        // new_anh_gpu_ndt_ptr->setStepSize(0.05);
+        new_anh_gpu_ndt_ptr->setTransformationEpsilon(0.05);
+        new_anh_gpu_ndt_ptr->setInputTarget(segmap);
+
+        is_map_recv = false;
+        // pthread_mutex_lock(&mutex);
+        std::lock_guard<std::mutex> segmap_lock(segmap_mutex);
+        registration = new_anh_gpu_ndt_ptr;  // 此步将更新主线程中的ndt实例
+        is_map_recv = true;
+        // pthread_mutex_unlock(&mutex);
+        std::cout<<"setInputTarget ok"<<std::endl;
+      }
+      auto t2 = ros::WallTime::now();
+      std::cout<<"segmap received time:"<<(t2 - t1).toSec()<<std::endl;
+      // is_map_recv = true;
+      isfirst = false;
+    }
+    params_.segmap_recv_seq = params_.segmap_recv_seq - 1;
+    if(params_.segmap_recv_seq == -1){
+      params_.segmap_recv_seq = lidar_num-1;
+    }
+  }
+  else
+  {
+    ROS_INFO("segmap received!");
+    // std::unique_lock<std::mutex> lock(pose_estimator_mutex);
+    // if(pose_estimator_mutex.try_lock())
+    // {
+    // std::thread t(backend_segmap,points_msg);
+
+      // is_map_recv = false;
+      auto t1 = ros::WallTime::now();
+
+      pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>());
+      pcl::fromROSMsg(*points_msg, *cloud);
+      // segmap = downsample(cloud);
+      segmap = cloud;
+      // std::cout<<"seq:"<<params_.segmap_recv_seq<<std::endl;
+      std::cout<<"segmap size:"<<segmap->size()<<std::endl;
+      // pcl::io::savePCDFileASCII("/home/maxsense/tmp/segmap.pcd", *segmap);
+      // registration->setInputTarget(segmap);
+      if(segmap->size()<500){
+        // is_map_recv = false;
+        return;
+      }
+      else
+      {
+        // registration->setInputTarget(segmap);
+
+        std::shared_ptr<gpu::GNormalDistributionsTransform> new_anh_gpu_ndt_ptr = std::make_shared<gpu::GNormalDistributionsTransform>();
+        new_anh_gpu_ndt_ptr->setResolution(params_.ndt_resolution);
+        // new_anh_gpu_ndt_ptr->setMaximumIterations(60);
+        // new_anh_gpu_ndt_ptr->setStepSize(0.05);
+        new_anh_gpu_ndt_ptr->setTransformationEpsilon(0.05);
+        new_anh_gpu_ndt_ptr->setInputTarget(segmap);
+
+        // std::cout<<"111"<<std::endl;
+
+        // registration = std::make_shared<gpu::GNormalDistributionsTransform>();
+        // ndt = new pclomp::NormalDistributionsTransform<PointT, PointT>();
+        // registration->setTransformationEpsilon(0.01);
+        // registration->setResolution(params_.ndt_resolution);
+        // registration->setStepSize(0.05);
+        // registration->setMaximumIterations(60);
+
+        // PointT::Ptr dummy_scan_ptr(new PointT());//??
+        // pcl::PointCloud<PointT>::Ptr dummy_scan_ptr(new pcl::PointCloud<PointT>());//?
+        // PointT dummy_point;
+        // dummy_scan_ptr->push_back(dummy_point); 
+        // new_anh_gpu_ndt_ptr->setInputSource(dummy_scan_ptr);
+        // new_anh_gpu_ndt_ptr->align(Eigen::Matrix4f::Identity());
+
+        is_map_recv = false;
+        // pthread_mutex_lock(&mutex);
+        std::lock_guard<std::mutex> segmap_lock(segmap_mutex);
+        registration = new_anh_gpu_ndt_ptr;  // 此步将更新主线程中的ndt实例
+        is_map_recv = true;
+        // pthread_mutex_unlock(&mutex);
+        std::cout<<"setInputTarget ok"<<std::endl;
+      }
+      auto t2 = ros::WallTime::now();
+      std::cout<<"segmap received time:"<<(t2 - t1).toSec()<<std::endl;
+
+      // is_map_recv = true;
+  }
+
+}
+
+/**
+ * @brief downsampling
+ * @param cloud   input cloud
+ * @return downsampled cloud
+ */
+pcl::PointCloud<PointT>::Ptr NdtNode::downsample(pcl::PointCloud<PointT>::Ptr& cloud)
+{
+  if(!downsample_filter)
+  {
+    return cloud;
+  }
+  pcl::PointCloud<PointT>::Ptr filtered(new pcl::PointCloud<PointT>());
+  downsample_filter->setInputCloud(cloud);
+  // downsample_filter->addPointsFromInputCloud();
+  downsample_filter->filter(*filtered);
+  // pcl::PointCloud<PointT>::Ptr filtered(new pcl::PointCloud<PointT>());
+  // downsample_filter->getOccupiedVoxelCenters(filtered->points);
+  filtered->header = cloud->header;
+  return filtered;
+}
+void NdtNode::RealPoseStatusCallback(const ms_common_msgs::LocalizationStatus::ConstPtr &msg)
+{
+  static bool lock = true;
+  real_pose_status = *msg;
+  if(real_pose_status.status==ms_common_msgs::LocalizationStatus::ERROR)
+  {
+    // std::cout<<"ndt real pose status callback"<<std::endl;
+    // if (lock == false) {
+      is_initial = false;
+      segmap = nullptr;
+      is_map_recv = false;
+      veh_start = false;
+      initial_guess.clearBuffer();
+      // lock = true;
+    // }
+  }
+  // else
+  // {
+  //   lock = false;
+  // }
+
+  // std::cout<<"update ndt status"<<std::endl;
+}
+
+void NdtNode::InitialPoseCallback(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg)
+{
+  const auto& p = msg->pose.pose.position;
+  const auto& q = msg->pose.pose.orientation;
+  // std::lock_guard<std::mutex> real_pose_lock(real_pose_mutex);
+  // real_pose <<p.x, p.y, p.z, q.w, q.x, q.y, q.z;
+  // yaw_rate = msg->twist.twist.angular.z;
+  // veh = msg->twist.twist.linear.x;
+  std::cout<<"\033[31m**ndt received initial:"<<msg->pose.pose.position.x<<","<<msg->pose.pose.position.y<<","<<msg->pose.pose.position.z<<"\033[0m"<<std::endl;
+
+  EstimatorState state;
+  state.time_stamp = msg->header.stamp.toSec();
+  state.state << p.x,p.y,p.z,q.w,q.x,q.y,q.z;
+  initial_guess.setState(state);
+  z_correct = msg->pose.pose.position.z;
+  is_initial = true;
+}
+
+void NdtNode::RealPoseCallback(const nav_msgs::Odometry::ConstPtr &msg)
+{
+  if (real_pose_status.status == ms_common_msgs::LocalizationStatus::ERROR)
+    return;
+
+  const auto &p = msg->pose.pose.position;
+  const auto& q = msg->pose.pose.orientation;
+  // tf2::Transform transform_tmp;
+  // geometry_msgs::Transform transformMsg;
+  // transformMsg.translation.x = p.x;
+  // transformMsg.translation.y = p.y;
+  // transformMsg.translation.z = p.z;
+  // transformMsg.rotation = pose.pose.orientation;
+  // tf2::fromMsg(transformMsg,transform);
+  // auto t1 = ros::WallTime::now();
+  // tf2::Transform transform(tf2::Quaternion(q.x,q.y,q.z,q.w),tf2::Vector3(p.x,p.y,p.z));
+  // transform = transform*RslidarEgoTrans.inverse();
+  // auto t2 = ros::WallTime::now();
+
+  // std::cout<<"inverse time:"<<(t2 - t1).toSec()<<" s"<<std::endl;
+
+  // std::lock_guard<std::mutex> real_pose_lock(real_pose_mutex);
+  // transform = RslidarEgoTrans.inverse()*transform;
+  // real_pose <<p.x, p.y, p.z, q.w, q.x, q.y, q.z;
+
+  EstimatorState state;
+  state.time_stamp = msg->header.stamp.toSec();
+  state.state << p.x, p.y, p.z, q.w, q.x, q.y, q.z;
+  initial_guess.setState(state);
+  z_correct = msg->pose.pose.position.z;
+
+  // real_pose << transform.getOrigin().getX(),transform.getOrigin().getY(),transform.getOrigin().getZ(),transform.getRotation().getW(),transform.getRotation().getX(),transform.getRotation().getY(),transform.getRotation().getZ();
+  // yaw_rate = msg->twist.twist.angular.z;
+  veh = msg->twist.twist.linear.x;
+  if(std::fabs(msg->twist.twist.linear.x)>0.5)
+    veh_start = true;
+  is_initial = true;
+  // std::cout<<real_pose<<std::endl;
+
+  // nav_msgs::Odometry ndttest;
+  // ndttest.header.stamp = ros::Time::now();
+  // ndttest.pose.pose.position.x = real_pose(0);
+  // ndttest.pose.pose.position.y = real_pose(1);
+  // ndttest.pose.pose.position.z = real_pose(2);
+  // ndttest.pose.pose.orientation.w = real_pose(3);
+  // ndttest.pose.pose.orientation.x = real_pose(4);
+  // ndttest.pose.pose.orientation.y = real_pose(5);
+  // ndttest.pose.pose.orientation.z = real_pose(6);
+  // // ndttest.pose.pose.orientation.z = tt_time;
+  // ndttest_publisher_.publish(ndttest);
+  diag_info_.setStatus("ndt/receive_guess_pose", 0, "OK");
+
+}
+
+double NdtNode::QuaternionToYaw(double x,double y,double z,double w)
+{
+  double t1 = 2.0 * (w * z + x * y);
+  double t2 = 1.0 - 2.0 * (y * y + z * z);
+  double yaw = atan2(t1, t2);
+  return yaw;
+}
+
+pcl::PointCloud<PointT>::Ptr NdtNode::distance_filter(const pcl::PointCloud<PointT>::Ptr& cloud)
+{
+    // double distance_near_thresh = 1;
+    // double distance_far_thresh = 100;
+    pcl::PointCloud<PointT>::Ptr filtered(new pcl::PointCloud<PointT>());
+    filtered->reserve(cloud->size());
+
+    std::copy_if(cloud->begin(), cloud->end(), std::back_inserter(filtered->points),
+      [&](const PointT& p) {
+        double d = p.getVector3fMap().norm();
+        return d > distance_near_thresh && d < distance_far_thresh;
+      }
+    );
+    filtered->width = filtered->size();
+    filtered->height = 1;
+    filtered->is_dense = false;
+
+    filtered->header = cloud->header;
+
+    return filtered;
+}
+/**
+ * @brief callback for point cloud data
+ * @param points_msg
+ */
+void NdtNode::RslidarPointsCallback(const sensor_msgs::PointCloud2ConstPtr& points_msg)
+{
+      diag_info_.setStatus("ndt/receive_rslidar_points", 0, "OK");
+      // diag_info_.setKeyValue("ndt/receive_rslidar_points", "error", "no initial|no segmap");
+
+        if(!is_initial||!segmap||!is_map_recv)
+        {
+          // std::cout<<"points callback is_initial:"<<is_initial<<",is_map_recv:"<<is_map_recv<<std::endl;
+          diag_info_.setStatus("ndt/receive_rslidar_points", 1, "error");
+          diag_info_.setKeyValue("ndt/receive_rslidar_points", "error", "no initial|no segmap");
+          return;
+        }
+        // if (segmap == nullptr)
+        // {
+        //   ROS_INFO("segmap nullptr");
+        // }
+        // is_initial = false;
+
+        const auto& stamp = points_msg->header.stamp;
+        pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>());
+        pcl::fromROSMsg(*points_msg, *cloud);
+
+        std::string frame_id = points_msg->header.frame_id;
+
+        if(cloud->size()<6500)//15000 test in lingang
+        {
+          ROS_WARN_STREAM_DELAYED_THROTTLE(10,"point size:"<<cloud->size()<<" <6500,empty environment");
+            // return;
+        }
+
+        ROS_WARN_STREAM("point size:"<<cloud->size());
+        if(cloud->empty())
+        {
+          ROS_ERROR("cloud is empty!!");
+          diag_info_.setStatus("ndt/receive_rslidar_points", 1, "error");
+          diag_info_.setKeyValue("ndt/receive_rslidar_points", "error", "cloud empty");
+          return;
+        }
+        auto filtered_r = distance_filter(cloud);//1~100m
+        auto filtered = downsample(filtered_r);
+        // auto filtered = cloud;
+        // NDT_DEBUG((ros::Time::now() - points_msg->header.stamp).toSec() * 1000 << ",");
+
+        double avg_processing_time;
+        double trans_probability;
+        double iteration;
+        double fitness_score;
+        {
+        std::lock_guard<std::mutex> segmap_lock(segmap_mutex);
+        // double tt_time;
+        try
+        {
+          auto t1 = ros::WallTime::now();
+          correct(filtered, stamp, frame_id);
+          auto t2 = ros::WallTime::now();
+          // tt_time = (t2 - t1).toSec();
+
+          // processing_time.push_back((t2 - t1).toSec());
+          // avg_processing_time = std::accumulate(processing_time.begin(), processing_time.end(), 0.0) / processing_time.size();
+          // ROS_INFO_STREAM("processing_time: " << avg_processing_time * 1000.0 << "[msec]");
+          avg_processing_time = (t2 - t1).toSec();
+          ROS_INFO_STREAM("processing_time: " << avg_processing_time * 1000.0 << "[msec]");
+        }
+        catch(std::exception& e)
+        {
+            std::cout<<"\033[1;30m"<<e.what()<<"\033[0m"<<std::endl;
+            // diag_info_.setStatus("ndt/receive_rslidar_points", 1, "error");
+            diag_info_.setStatus("ndt/scan_match", 1, "ERROR");
+            diag_info_.setKeyValue("ndt/scan_match", "ERROR", "ndt align error");
+            // ros::shutdown();
+        }
+        // }
+        trans_probability = registration->getTransformationProbability();
+        iteration = registration->getFinalNumIteration();
+        // double fitness_score = 0.4 * (avg_processing_time / 100.0) + 0.3 * (iteration / 10.0) + 0.3 * ((2.0 - trans_probability) / 2.0);
+        fitness_score = registration->getFitnessScore();
+        }
+        // Eigen::Vector3f d;
+        // d << real_pose(0) - observation(0),real_pose(1) - observation(1),real_pose(2) - observation(2);
+        // double delta = d.squaredNorm();
+        ROS_INFO_STREAM("fitness_score:"<<fitness_score<<"prob:"<<trans_probability<<"iteration:"<<iteration<<"time:"<<avg_processing_time);
+
+        // Eigen::MatrixXd measurementCovariance(6, 6);  // R
+        // kalmanGain.noalias() = estimateErrorCovariance_*(estimateErrorCovariance_+ measurementCovariance).inverse();
+
+        // Eigen::VectorXd innovationSubset(6);                         // z - Hx
+        // innovation = (measurement - state_);
+        // state_.noalias() += kalmanGain * innovation;
+
+        // Eigen::MatrixXd gainResidual;
+        // gainResidual.setIdentity();
+        // gainResidual.noalias() -= kalmanGain * stateToMeasurement;
+        // estimateErrorCovariance_ = gainResidual * estimateErrorCovariance_ * gainResidual.transpose();
+        // estimateErrorCovariance_.noalias() += kalmanGain * measurementCovariance * kalmanGain.transpose();
+
+
+        // //filter curvature too big point https://zhuanlan.zhihu.com/p/72083902
+        // ndt_point_buff.push_back({observation(0),observation(1)});
+
+        // double k = 0.0;
+        // if(ndt_point_buff.size()==3)
+        // {
+        //   double ta = std::sqrt(std::pow(ndt_point_buff[1].x - ndt_point_buff[0].x,2)+std::pow(ndt_point_buff[1].y - ndt_point_buff[0].y,2));
+        //   double tb = std::sqrt(std::pow(ndt_point_buff[1].x - ndt_point_buff[2].x,2)+std::pow(ndt_point_buff[1].y - ndt_point_buff[2].y,2));
+        //   if(ta>0.05 && tb>0.05)
+        //   {
+        //     Eigen::Matrix3d m;
+        //     m << 1,-ta,ta*ta,
+        //         1,0,0,
+        //         1,tb,tb*tb;
+        //     Eigen::Vector3d x(ndt_point_buff[0].x,ndt_point_buff[1].x,ndt_point_buff[2].x);
+        //     Eigen::Vector3d y(ndt_point_buff[0].y,ndt_point_buff[1].y,ndt_point_buff[2].y);
+        //     Eigen::Vector3d a = m.inverse()*x;
+        //     Eigen::Vector3d b = m.inverse()*y;
+        //     k = 2*(a(2)*b(1)-a(1)*b(2))/std::sqrt(std::pow(a(1)*a(1)+b(1)*b(1),3));
+
+        //     double angle = std::acos(((ndt_point_buff[0].x - ndt_point_buff[1].x)*(ndt_point_buff[2].x - ndt_point_buff[1].x) + (ndt_point_buff[0].y - ndt_point_buff[1].y)*(ndt_point_buff[2].y - ndt_point_buff[1].y))/(ta*tb));
+        //     if(std::fabs(angle) < 0.34)//20
+        //       angle = M_PI;
+        //     mean_angle_buff.push_back(angle);
+        //     mean_curvature_buff.push_back(std::fabs(k));
+        //   }
+        // }
+        // // if(mean_curvature_buff.size()==20)
+        //   mean_curvature = std::accumulate(mean_curvature_buff.begin(), mean_curvature_buff.end(), 0.0) / mean_curvature_buff.size();
+        //   mean_angle = std::accumulate(mean_angle_buff.begin(), mean_angle_buff.end(), 0.0) / mean_angle_buff.size();
+
+
+        // nav_msgs::Odometry ndttest;
+        // ndttest.header.stamp = stamp;
+        // ndttest.pose.pose.position.x = fitness_score;
+        // ndttest.pose.pose.position.y = trans_probability;
+        // ndttest.pose.pose.position.z = iteration;
+        // ndttest.pose.pose.orientation.w = mean_angle;
+        // ndttest.pose.pose.orientation.x = delta;
+        // ndttest.pose.pose.orientation.y = mean_curvature;
+        // ndttest.pose.pose.orientation.z = k;
+        // // ndttest.pose.pose.orientation.z = tt_time;
+        // ndttest_publisher_.publish(ndttest);
+
+        // if(fitness_score==0.0||fitness_score>20||iteration==0||trans_probability<=0.5||iteration>=37||iteration==2)
+          // fitness_score=std::numeric_limits<float>::max();
+
+
+        // ROS_INFO_STREAM("fitness_score:"<<fitness_score<<"prob:"<<trans_probability<<"iteration:"<<iteration<<"time:"<<avg_processing_time);
+        // if(delta>0.5)
+        // {
+        //   double ndtyaw = QuaternionToYaw(observation(3),observation(4),observation(5),observation(6));
+        //   double atan = atan2(observation(1)-real_pose(1),observation(0)-real_pose(0));
+        //   double tmp = 0;
+        //   if((ndtyaw-atan) > M_PI)
+        //     tmp = ndtyaw-atan - M_PI;
+        //   else if((ndtyaw-atan) < -M_PI)
+        //     tmp = ndtyaw-atan + M_PI;
+        //   else
+        //     tmp = ndtyaw-atan;
+
+        //   if(tmp>(M_PI/2))
+        //     tmp = M_PI-tmp;
+        //   else if(tmp<(-M_PI/2))
+        //     tmp = M_PI+tmp;
+        //   else
+        //     tmp = std::fabs(tmp);
+
+        //   if(tmp>0.2617993877991494)//15
+        //     return;
+        // }
+
+
+        // if(delta>5)
+        // {
+        //   std::cout<<d.squaredNorm()<<"big jump > 5m"<<std::endl;
+        //   // return;
+        // }
+
+
+        // if(real_pose_status.status == ms_common_msgs::LocalizationStatus::UNKNOWN)
+        // {
+        //   // const auto& p = msg->pose.pose.position;
+        //   // const auto& q = msg->pose.pose.orientation;
+        //   // static double last_fitness_score = fitness_score;
+        //   std::cout<<"observation$$:"<<observation.transpose()<<std::endl;
+
+        //   std::lock_guard<std::mutex> real_pose_lock(real_pose_mutex);
+        //   Eigen::Quaternionf quat(observation(3),observation(4),observation(5),observation(6));
+        //   if(last_trans_probability<trans_probability)
+        //   {
+        //     std::normal_distribution<double> random_distribution_{0.,0.05};
+        //     real_pose <<observation(0)+random_distribution_.stddev(), observation(1)+random_distribution_.stddev(), observation(2), quat.w(), quat.x(), quat.y(), quat.z();
+        //     last_trans_probability = trans_probability;
+        //   }
+        //   else
+        //   {
+        //     std::normal_distribution<double> random_distribution_{0.,0.05};
+        //     real_pose <<real_pose(0)+random_distribution_.stddev(), real_pose(1)+random_distribution_.stddev(), real_pose(2), quat.w(), quat.x(), quat.y(), quat.z();
+        //     // last_fitness_score = fitness_score;
+        //   }
+
+        //   std::cout<<"real pose$$:"<<real_pose.transpose()<<std::endl;
+        //   // yaw_rate = msg->twist.twist.angular.z;
+        //   // veh = msg->twist.twist.linear.x;
+        //   // std::cout<<"\033[31m**ndt received initial:"<<msg->pose.pose.position.x<<","<<msg->pose.pose.position.y<<","<<msg->pose.pose.position.z<<"\033[0m"<<std::endl;
+        //   is_initial = true;
+        // }
+
+
+        // fitness_score = std::pow(fitness_score/15,4);
+        // fitness_score = fitness_score/(std::pow(trans_probability,3));
+        // fitness_score = std::pow(fitness_score/15,4);
+
+        // if (fitness_score > 0.02)
+        {
+          double cur_pcd_confidence;
+          for (struct PcdConfidence pc : segmap_array) {
+            if (observation(0) > pc.x_min && observation(0) < pc.x_max &&
+                observation(1) > pc.y_min && observation(1) < pc.y_max)
+              cur_pcd_confidence = pc.confidence;
+          }
+          // std::cout<<"cur_pcd_confidence:"<<cur_pcd_confidence<<std::endl;
+          // fitness_score *= (-100.*cur_pcd_confidence+100.);
+          fitness_score *= std::pow(3,cur_pcd_confidence));
+          // std::cout << "fitness_score_0:" << fitness_score << std::endl;
+
+          fitness_score = fitness_score / (std::pow(trans_probability, 3));
+          fitness_score = std::pow(fitness_score / 15, 4);
+          // std::cout << "fitness_score_1:" << fitness_score << std::endl;
+        }
+
+        if (fitness_score < 0.02 && veh_start) {
+          fitness_score = 0.02;
+          // fitness_score += std::max(0.0, avg_processing_time - 0.15) * 5.0;
+        }
+
+        ROS_INFO_STREAM("fitness_score:"<<fitness_score);
+
+        // double fitness_score_r,fitness_score_p,fitness_score_y;
+        // if(!veh_start)//fix when start pitch roll slide,lead to imu remove gravity error
+        // {
+        //   fitness_score_r=fitness_score_p=fitness_score_y=5;
+        //   // fitness_score_p=5;
+        // }
+        // else
+        // {
+        //   fitness_score_r=fitness_score_p=fitness_score_y=fitness_score;
+        //   // fitness_score_p=5;
+        // }
+        // fitness_score = fitness_score + tt_time/10.0;
+
+        // if(mean_curvature>1.0&&mean_angle<2.8)
+          // fitness_score = fitness_score + mean_curvature;
+
+        tf2::Transform transform(tf2::Quaternion(observation(4),observation(5),observation(6),observation(3)),tf2::Vector3(observation(0),observation(1),observation(2)));
+        if(frame_id == "/rslidar")
+          transform = transform*RslidarEgoTrans;
+
+
+        nav_msgs::Odometry ndtodom;
+        ndtodom.header.stamp = stamp;
+        // ndtodom.header.stamp = ros::Time::now();
+        ndtodom.header.frame_id = "map";
+        ndtodom.child_frame_id = "ego";
+        ndtodom.pose.pose.position.x = transform.getOrigin().getX();
+        ndtodom.pose.pose.position.y = transform.getOrigin().getY();
+        ndtodom.pose.pose.position.z = transform.getOrigin().getZ();
+
+        ndtodom.pose.pose.orientation.w = transform.getRotation().getW();
+        ndtodom.pose.pose.orientation.x = transform.getRotation().getX();
+        ndtodom.pose.pose.orientation.y = transform.getRotation().getY();
+        ndtodom.pose.pose.orientation.z = transform.getRotation().getZ();
+
+
+        // std::cout<<"ndt result:"<<ndtodom.pose.pose.position.x<<","<<ndtodom.pose.pose.position.y<<","<<ndtodom.pose.pose.position.z<<std::endl;
+
+
+
+        // Eigen::Quaternionf quat(observation(3),observation(4),observation(5),observation(6));
+        // quat.normalize();
+        // geometry_msgs::Quaternion ndtodom_quat;
+        // ndtodom_quat.w = quat.w();
+        // ndtodom_quat.x = quat.x();
+        // ndtodom_quat.y = quat.y();
+        // ndtodom_quat.z = quat.z();
+
+        // std::cout<<"msf pitch:"<<msf_pitch<<std::endl;
+        // double x,y,z1,z2,z_t;
+        // x = observation(0);
+        // y = observation(1);
+        // z1 = real_pose(2)+rslidar_ego_z;
+        // // z2 = observation(2)+rslidar_ego_z;
+        // z_t = 1.5;
+
+        // std::cout<<"x:"<<x<<"y:"<<y<<"z:"<<observation(2)<<"z1:"<<z1<<std::endl;
+        // std::cout<<"map change:"<<map_changed_<<std::endl;
+        double fitness_score_x = fitness_score;// + std::fabs(delta_x);
+        double fitness_score_y = fitness_score;// + std::fabs(delta_y);
+        double fitness_score_z = fitness_score;// + std::fabs(delta_z);
+        double fitness_score_roll = fitness_score;// + std::fabs(delta_roll*57.3);
+        double fitness_score_pitch = fitness_score;// + std::fabs(delta_pitch*57.3);
+        double fitness_score_yaw = fitness_score;// + std::fabs(delta_yaw*57.3);
+        // if (!veh_start) {
+        //   fitness_score_x = fitness_score;
+        //   fitness_score_y = fitness_score;
+        //   fitness_score_z = fitness_score;
+        //   fitness_score_roll = fitness_score;
+        //   fitness_score_pitch = fitness_score;
+        //   fitness_score_yaw = fitness_score;
+        // }
+        if(map_.GetZByXYZ(ndtodom.pose.pose.position.x,ndtodom.pose.pose.position.y,ndtodom.pose.pose.position.z,2.5) && params_.use_roadmap_z)
+        {
+          // ndtodom.pose.pose.position.z = z1-rslidar_ego_z;
+          fitness_score_z = 1e-5;
+          std::cout<<"RoadMap z:"<<ndtodom.pose.pose.position.z<<std::endl;
+        } else if (::fabs(ndtodom.pose.pose.position.z - z_correct)>0.2)
+        {
+          ndtodom.pose.pose.position.z = z_correct;
+        }
+        // z_correct = ndtodom.pose.pose.position.z;
+        // filterRoadMapZ(z_correct); //pujiang #20 downhill // bug, try adaptive
+
+        // filterRoadMapZ(ndtodom.pose.pose.position.z); //pujiang #20 downhill bug, try adaptive
+        // else if(map_.GetZByXYZ(x,y,z2,z_t))
+        // {
+        //   ndtodom.pose.pose.position.z = z2-rslidar_ego_z;
+        //   fitness_score_z = 1e-5;
+        //   std::cout<<"z2:"<<z2<<std::endl;
+        // }
+        // else if(map_.GetZByXYZ(x,y,observation(2)+rslidar_ego_z,2))
+        // {
+
+        // }
+        // if(fitness_score==0.0||fitness_score>20||iteration==0||trans_probability<=0.5)
+        if(fitness_score==0.0||fitness_score>20||iteration==0||trans_probability<=0.5||iteration>=37)
+        {
+          fitness_score=std::numeric_limits<float>::max();
+          return;
+        }
+
+
+        // if(fitness_score==0.0||fitness_score>20||iteration==0||trans_probability<=0.5||iteration>=37||iteration==2)
+        // if(fitness_score==0.0||fitness_score>20||iteration==0||trans_probability<=0.5||iteration>=37)
+          // fitness_score=std::numeric_limits<float>::max();
+        // ndtodom.pose.pose.position.z = 1.3;//road map z is not ok for test
+
+        ndtodom.pose.covariance = boost::array<double, 36>({
+        fitness_score_x, 0., 0., 0., 0., 0.,
+        0., fitness_score_y, 0., 0., 0., 0.,
+        0., 0., fitness_score_z, 0., 0., 0.,
+        0., 0., 0., fitness_score_roll, 0., 0.,
+        0., 0., 0., 0., fitness_score_pitch, 0.,
+        0., 0., 0., 0., 0., fitness_score_yaw});
+        // if (ndtodom.pose.covariance[0]==0.)
+          // return;
+
+        ndtodom.twist.twist.linear.x = 0.0;
+        ndtodom.twist.twist.linear.y = 0.0;
+        ndtodom.twist.twist.angular.z = 0.0;
+        ndtodom_publisher_.publish(ndtodom);
+
+        geometry_msgs::PoseWithCovarianceStamped ndtpose;
+        ndtpose.header = ndtodom.header;
+        ndtpose.pose = ndtodom.pose;
+        ndtpose_publisher_.publish(ndtpose);
+
+        diag_info_.setStatus("ndt/scan_match", 0, "OK");
+        // std::cout<<"pub ndtodom ok"<<std::endl;
+        // NDT_DEBUG((ros::Time::now() - points_msg->header.stamp).toSec() * 1000 << ",");
+}
+
+void NdtNode::filterRoadMapZ(double &z)
+{
+  static double a = 0.01, a2 = 0.2, value_prev = 0.0, value_prev_2 = 0.0, x0 = 0.0, x1 = 0.0, x2 = 0.0, x3 = 0.0, x4 = 0.0;
+  static double value_out = 0.0;
+  static bool if_initial = true;
+
+  if(if_initial)
+  {
+    value_prev = z;
+    x4=x3=x2=x1=x0=z;
+    if_initial = false;
+    value_out = z;
+    value_prev_2 = z;
+  }
+  else
+  {
+    value_out = z * a + value_prev * (1 - a);
+    x4 = x3; x3 = x2; x2 = x1; x1 = x0;
+    x0 = value_out;
+    std::vector<double> serie{x0, x1, x2, x3, x4};
+    std::sort(serie.begin(),serie.end());
+    value_out = serie[2];
+    value_prev = value_out;
+    value_out = value_out * a2 + value_prev_2 * (1 - a2);
+    value_prev_2 = value_out;
+  }
+
+  z = value_prev_2;
+}
+
+void NdtNode::ComputeAngles(double q0, double q1, double q2, double q3, double &roll, double &pitch, double &yaw)
+{
+  roll = std::atan2(q0 * q1 + q2 * q3, 0.5f - q1 * q1 - q2 * q2);
+  pitch = std::asin(-2.0f * (q1 * q3 - q0 * q2));
+  yaw = std::atan2(q1 * q2 + q0 * q3, 0.5f - q2 * q2 - q3 * q3);
+}
+
+double NdtNode::NormalizeAngleDifference(double difference)
+{
+  // std::cout<<"difference:"<<difference<<std::endl;
+  while (difference > M_PI) {
+    difference -= float(2.0 * M_PI);
+  }
+  while (difference < -M_PI) {
+    difference += float(2.0 * M_PI);
+  }
+  return difference;
+}
+
+/**
+* @brief correct
+* @param cloud   input cloud
+* @return cloud aligned to the globalmap
+*/
+void NdtNode::correct(pcl::PointCloud<PointT>::Ptr& cloud, const ros::Time& stamp, const std::string frame_id)
+{
+
+    // std::cout<<"real pose:"<<real_pose.transpose()<<std::endl;
+    EstimatorState state;
+    initial_guess.getState(stamp.toSec(),state);
+
+    // {
+      // std::lock_guard<std::mutex> real_pose_lock(real_pose_mutex);
+    if(frame_id == "/rslidar")
+    {
+      tf2::Transform transform(tf2::Quaternion(state.state(4),state.state(5),state.state(6),state.state(3)),tf2::Vector3(state.state(0),state.state(1),state.state(2)));
+      transform = transform*RslidarEgoTrans.inverse();
+      state.state << transform.getOrigin().getX(),transform.getOrigin().getY(),transform.getOrigin().getZ(),transform.getRotation().getW(),transform.getRotation().getX(),transform.getRotation().getY(),transform.getRotation().getZ();
+    }
+
+    Eigen::Matrix4f init_guess = Eigen::Matrix4f::Identity();
+    init_guess.block<3, 3>(0, 0) = Eigen::Quaternionf(state.state(3),state.state(4),state.state(5),state.state(6)).toRotationMatrix();
+    // init_guess.block<3, 1>(0, 3) = (state.state(0, 3)).cast<float>();
+    init_guess.block<3, 1>(0, 3) = Eigen::Vector3f(state.state(0),state.state(1),state.state(2));
+    // }
+    // std::cout << "ndt guess pose:" << state.state(0)<< state.state(1)<< state.state(2)<<std::endl;
+
+    auto t1 = ros::WallTime::now();
+    registration->setInputSource(cloud);
+    auto t2 = ros::WallTime::now();
+
+    auto t3 = ros::WallTime::now();
+    registration->align(init_guess);
+    auto t4 = ros::WallTime::now();
+
+    // ROS_INFO_STREAM("setInputSource_time: " << (t2-t1).toSec() * 1000.0 << "[msec]");
+    // ROS_INFO_STREAM("align_time: " << (t4-t3).toSec() * 1000.0 << "[msec]");
+
+    Eigen::Matrix4f trans = registration->getFinalTransformation();
+    Eigen::Vector3f p = trans.block<3, 1>(0, 3);
+    Eigen::Quaternionf q(trans.block<3, 3>(0, 0));
+
+    // if(quat().vec().dot(q.vec()) < 0.0f)
+    // {
+    //   q.coeffs() *= -1.0f;
+    // }
+    // q=q.normalized();
+    // std::cout<<"ndt done!"<<std::endl;
+
+    observation.middleRows(0, 3) = p;
+    observation.middleRows(3, 4) = Eigen::Vector4f(q.w(), q.x(), q.y(), q.z());
+    // double fitness_score = registration->getFitnessScore();
+    // std::cout<<"observation:"<<observation<<std::endl;
+
+    // Eigen::Vector3f d;
+    delta_x = state.state(0) - observation(0);
+    delta_y = state.state(1) - observation(1);
+    delta_z = state.state(2) - observation(2);
+    ComputeAngles(state.state(3), state.state(4), state.state(5), state.state(6), delta_roll, delta_pitch, delta_yaw);
+    double roll,pitch,yaw;
+    ComputeAngles(q.w(), q.x(), q.y(), q.z(), roll,pitch,yaw);
+    delta_roll -= roll;
+    delta_roll = NormalizeAngleDifference(delta_roll);
+    delta_pitch -= pitch;
+    delta_pitch = NormalizeAngleDifference(delta_pitch);
+    delta_yaw -= yaw;
+    delta_yaw = NormalizeAngleDifference(delta_yaw);
+    // double delta = d.squaredNorm();
+    // NDT_DEBUG((t4-t1).toSec() * 1000.0<<","<<delta<<",");
+
+    return ;
+}
+
+void NdtNode::RoadMapCallback(const ms_common_msgs::RoadMap::ConstPtr &msg)
+{
+  if (msg->header.seq == 1 || map_.name_.compare(msg->name) != 0 || map_.size() != msg->road_map.size())
+    {
+      // std::lock_guard<decltype(map_mutex_)> map_access_lock(map_mutex_);
+      // ms_common_msgs::RoadMap::ConstPtr map_ptr(new ms_common_msgs::RoadMap(msg));
+      // map_ = convertMsg2RoadMap(msg);
+      map_ = mpm::convertMsg2RoadMap(msg);
+      map_.InitializeLaneMap();
+      map_changed_ = true;
+      // ROS_INFO("RoadMap received");
+    }
+}

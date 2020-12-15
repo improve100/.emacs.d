@@ -1,0 +1,41 @@
+* 如果不想要输出结果表格 ，加上 results output
+#+BEGIN_SRC C++ :results output
+  #include <iostream>
+  class A{
+  public:
+  void output(std::string &s){std::cout<<s<<std::endl;}
+  };
+
+  int main(){
+   std::cout<<"hello world2"<<std::endl;
+   A a;
+   std::string s = "hello org";
+   a.output(s);
+   std::string s2 = "hello3";
+   a.output(s2);
+  }
+
+#+END_SRC
+
+#+RESULTS:
+: hello world2
+: hello org
+: hello3
+
+
+#+begin_src C++ :includes <stdio.h>
+  int a=1;
+  int b=1;
+  printf("%d\n", a+b);
+#+end_src
+
+#+RESULTS:
+: 2
+
+#+begin_src C++ :includes <iostream>
+  std::cout<<"Hello World!\n";
+#+end_src
+
+#+RESULTS:
+
+* https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-C.html

@@ -1,0 +1,12 @@
+/home/maxsense/codes/autonomous_driving/src/perception/ros/imu_gnss_fusion/src/imu_gnss_fusion_node.cpp
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!perception!ros!imu_gnss_fusion!src!imu_gnss_fusion_node.cpp#
+/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg/NovatelDualAntennaHeading.msg
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!perception!ros!driver!novatel_gps_driver!novatel_gps_msgs!msg!NovatelDualAntennaHeading.msg#
+/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg/NovatelCorrectedImuData.msg
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!perception!ros!driver!novatel_gps_driver!novatel_gps_msgs!msg!NovatelCorrectedImuData.msg#
+/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg/NovatelExtendedSolutionStatus.msg
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!perception!ros!driver!novatel_gps_driver!novatel_gps_msgs!msg!NovatelExtendedSolutionStatus.msg#
+/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_msgs/msg/NovatelHeading2.msg
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!perception!ros!driver!novatel_gps_driver!novatel_gps_msgs!msg!NovatelHeading2.msg#
+/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/novatel_gps_driver/novatel_gps_driver/src/nodelets/novatel_gps_nodelet.cpp
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!perception!ros!driver!novatel_gps_driver!novatel_gps_driver!src!nodelets!novatel_gps_nodelet.cpp#

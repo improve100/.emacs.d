@@ -1,0 +1,4 @@
+#+STARTUP: showall
+* setq vs setq-default
+** setq 设置局部变量,如果局部变量不是全局变量，全局也可以访问
+** setq-default 设置全局变量

@@ -1,0 +1,452 @@
+#+startup: showall
+#+startup: nolatexpreview
+#+title: PCDviewer qt版本
+
+* 新建工程
+#+NAME: CMakeLists  
+#+BEGIN_SRC cmake :tangle CMakeLists.txt   :tangle-mode (identity #o755) :padline no
+cmake_minimum_required(VERSION 2.8.3)
+
+project(test)
+
+# init_qt: Let's do the CMake job for us
+set(CMAKE_AUTOMOC ON) # For meta object compiler
+set(CMAKE_AUTORCC ON) # Resource files
+set(CMAKE_AUTOUIC ON) # UI files
+
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+# Find the QtWidgets library
+find_package(Qt5 REQUIRED Widgets)
+
+find_package(VTK REQUIRED)
+find_package(PCL 1.7.1 REQUIRED)
+
+# Fix a compilation bug under ubuntu 16.04 (Xenial)
+list(REMOVE_ITEM PCL_LIBRARIES "vtkproj4")
+
+include_directories(${PCL_INCLUDE_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+set(project_SOURCES main.cpp pclwindow.cpp)
+
+add_executable(${PROJECT_NAME} ${project_SOURCES})
+
+target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES} Qt5::Widgets)
+#+END_SRC
+
+* ui
+#+NAME: 重绘ui
+#+begin_src bash
+designer
+#designer mainwindow.ui 卡顿,终端启动正常
+#+end_src
+
+#+RESULTS: 重绘ui
+
+* pclwindow.h
+#+NAME: pclwindow_hpp
+#+BEGIN_SRC C++ :main no :tangle pclwindow.h   :tangle-mode (identity #o755) :padline no
+#ifndef PCLWINDOW_H
+#define PCLWINDOW_H
+#include <QMainWindow>
+
+namespace Ui {
+class Pclwindow;
+}
+
+class Pclwindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit Pclwindow(QWidget *parent = 0);
+    ~Pclwindow();
+
+private slots:
+    void on_action_triggered();
+    void on_action_2_triggered();
+    void prepcd_btn_clicked();
+    void nextpcd_btn_clicked();
+    void fileselect_btn_clicked();
+    void bag2pcd_btn_clicked();
+    void pcd1select_btn_clicked();
+    void pcd2select_btn_clicked();
+    void pcdsize_btn_clicked();
+    void topdown_btn_clicked();
+
+private:
+    Ui::Pclwindow *ui;
+    QString pcdpath;
+    QStringList files;
+    QListIterator<QString> itr;
+};
+
+#endif // PCLWINDOW_H
+#+END_SRC
+
+* pclwindow.cpp
+#+NAME: pclwindow_cpp
+#+BEGIN_SRC C++ :main no :tangle pclwindow.cpp   :tangle-mode (identity #o755) :padline no
+  #include "pclwindow.h"
+  #include "ui_pclwindow.h"
+  #include <QFileDialog>
+  #include <QMessageBox>
+  #include <QProcess>
+  #include <QTextStream>
+
+  #include <pcl/point_types.h>
+  #include <pcl/common/common.h>
+  #include <pcl/filters/filter.h>
+  #include <pcl/visualization/cloud_viewer.h>
+  #include <pcl/visualization/pcl_visualizer.h>
+  #include <pcl/io/pcd_io.h>
+  #include <vtkRenderWindow.h>
+  #include <iostream>
+  #include <boost/filesystem.hpp>
+  #include <boost/thread/thread.hpp>
+  #include <boost/bind.hpp>
+  // #include <QDebug>
+
+
+  pcl::visualization::PCLVisualizer pviz ("test_viz", false);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_1 (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_2 (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_xyz (new pcl::PointCloud<pcl::PointXYZ>);
+
+  Pclwindow::Pclwindow(QWidget *parent) :
+      QMainWindow(parent),
+      itr(files),
+      ui(new Ui::Pclwindow)
+  {
+      ui->setupUi(this);
+
+      // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_xyz (new pcl::PointCloud<pcl::PointXYZ>);
+      // for (float y = -0.5f; y <= 0.5f; y += 0.01f)
+      // {
+      //   for (float z = -0.5f; z <= 0.5f; z += 0.01f)
+      //   {
+      //     pcl::PointXYZ point;
+      //     point.x = 2.0f - y;
+      //     point.y = y;
+      //     point.z = z;
+      //     cloud_xyz->points.push_back (point);
+      //   }
+      // }
+      // cloud_xyz->width = cloud_xyz->points.size ();
+      // cloud_xyz->height = 1;
+
+         vtkSmartPointer<vtkRenderWindow> renderWindow = pviz.getRenderWindow();
+         ui->widget->SetRenderWindow (renderWindow);
+
+         pviz.setupInteractor (ui->widget->GetInteractor (), ui->widget->GetRenderWindow ());
+         pviz.getInteractorStyle ()->setKeyboardModifier (pcl::visualization::INTERACTOR_KB_MOD_SHIFT);
+
+         // pviz.addPointCloud<pcl::PointXYZ>(cloud_xyz);
+         // pviz.setBackgroundColor(0, 0, 0.1);
+
+    connect(ui->prepcd, SIGNAL(clicked()), this, SLOT(prepcd_btn_clicked()));
+    connect(ui->nextpcd, SIGNAL(clicked()), this, SLOT(nextpcd_btn_clicked()));
+    connect(ui->fileselect, SIGNAL(clicked()), this, SLOT(fileselect_btn_clicked()));
+    connect(ui->pcd1select, SIGNAL(clicked()), this, SLOT(pcd1select_btn_clicked()));
+    connect(ui->pcd2select, SIGNAL(clicked()), this, SLOT(pcd2select_btn_clicked()));
+    connect(ui->bag2pcd, SIGNAL(clicked()), this, SLOT(bag2pcd_btn_clicked()));
+    connect(ui->pcdsize, SIGNAL(clicked()), this, SLOT(pcdsize_btn_clicked()));
+    connect(ui->topdown, SIGNAL(clicked()), this, SLOT(topdown_btn_clicked()));
+     if(pcdpath == "")
+     {
+      ui->prepcd->setEnabled(false);
+      ui->nextpcd->setEnabled(false);
+      ui->bag2pcd->setEnabled(false);
+     }
+     ui->widget->show();
+
+  }
+
+  Pclwindow::~Pclwindow()
+  {
+      delete ui;
+  }
+
+  void Pclwindow::on_action_triggered()
+  {
+      this->close();
+  }
+
+  void Pclwindow::fileselect_btn_clicked()
+  {
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*.bag)"));
+    if (fileName != "")
+    {
+       ui->bagpath->setText(fileName);
+       ui->bag2pcd->setEnabled(true);
+       ui->bag2pcd->setText("Bag2Pcd");
+       // QProcess::execute("roscore");
+       QProcess::execute("rm /tmp/bag2pcd/*.pcd");
+    }
+  }
+
+  void Pclwindow::pcd1select_btn_clicked()
+  {
+      QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*.pcd)"));
+      if (fileName != "")
+      {
+          ui->pcd1->setText(fileName);
+          std::cout<<fileName.toStdString()<<std::endl;
+          pviz.removeAllPointClouds();
+          pviz.removeAllShapes();
+          boost::thread t(boost::bind(pcl::io::loadPCDFile<pcl::PointXYZ>, fileName.toStdString(), boost::ref(*cloud_1)));
+          t.join();
+          if (cloud_1->size() > 0)
+          {
+              pviz.addPointCloud<pcl::PointXYZ>(cloud_1,"cloud_1");
+          }
+      }
+  }
+  void Pclwindow::pcd2select_btn_clicked()
+  {
+      QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*.pcd)"));
+      if (fileName != "")
+      {
+          ui->pcd2->setText(fileName);
+          std::cout<<fileName.toStdString()<<std::endl;;
+          boost::thread t(boost::bind(pcl::io::loadPCDFile<pcl::PointXYZ>, fileName.toStdString(), boost::ref(*cloud_2)));
+          t.join();
+          ui->progressBar->setValue(100);
+          if (cloud_2->size() > 0)
+          {
+              pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> cloud2_color(cloud_2, 0, 255, 0);
+              pviz.addPointCloud<pcl::PointXYZ>(cloud_2,cloud2_color,"cloud_2");
+              int size = std::min(cloud_1->size(),cloud_2->size());
+              //给定两个点连一条线
+              for(int i=0;i<size;i++)
+                pviz.addLine<pcl::PointXYZ>(cloud_1->points[i],cloud_2->points[i],QString::number(i).toStdString());
+          }
+      }
+
+  }
+  void Pclwindow::pcdsize_btn_clicked()
+  {
+    bool ok = false;
+    double size = ui->pcdsizeset->text().toDouble(&ok);
+    if(cloud_xyz->size()>0)
+      pviz.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, size, "cloud_xyz");
+    if(cloud_1->size()>0)
+      pviz.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, size, "cloud_1");
+    if(cloud_2->size()>0)
+      pviz.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, size, "cloud_2");
+  }
+  void Pclwindow::topdown_btn_clicked()
+  {
+    pviz.initCameraParameters();
+    pviz.setCameraPosition(0, 0, 16, 0, 0, 0);
+  }
+
+
+  void Pclwindow::bag2pcd_btn_clicked()
+  {
+        QString fileName = ui->bagpath->text();
+        QFileInfo fi;
+        fi = QFileInfo(fileName);
+        pcdpath = fi.absolutePath();
+        std::cout<<pcdpath.toStdString()<<std::endl;
+        std::cout<<"bag2pcd:"<<fileName.toStdString()<<std::endl;
+        QProcess::execute("rosrun pcl_ros bag_to_pcd "+fileName+" /ns1/rslidar_points "+pcdpath);
+        QDir dir(pcdpath);
+        QStringList nameFilters;
+        nameFilters << "*.pcd";
+        files = dir.entryList(nameFilters, QDir::Files|QDir::Readable, QDir::Name);
+        QListIterator<QString> i(files);
+        itr = i;
+        ui->bag2pcd->setText("Done.");
+
+        nextpcd_btn_clicked();      
+        ui->nextpcd->setEnabled(true);
+        ui->pcdinfo->clear();
+        QString info;
+        QTextStream ts(&info);
+        ts<<"PcdFilesNum:"<<files.size()<<"\n";
+        ui->pcdinfo->append(info);
+  }
+  void Pclwindow::prepcd_btn_clicked()
+  {
+      if (itr.hasPrevious())
+      {
+          pviz.removeAllPointClouds();
+          pviz.removeAllShapes();
+          QString ss = itr.previous();
+          QString ext = ".pcd";
+          ui->stamp->setText(ss.left(ss.length() - 4));
+          int idx = files.indexOf(ss);
+          ss = pcdpath +"/"+ss;
+          std::cout<<ss.toStdString()<<std::endl;;
+
+          boost::thread t(boost::bind(pcl::io::loadPCDFile<pcl::PointXYZ>, ss.toStdString(), boost::ref(*cloud_xyz)));
+          t.join();
+          ui->progressBar->setValue(100);
+          std::cout<<"Done."<<std::endl;;
+
+          pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_s (new pcl::PointCloud<pcl::PointXYZ>);
+          pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_e (new pcl::PointCloud<pcl::PointXYZ>);
+          if (cloud_xyz->size() > 0)
+          {
+              pviz.addPointCloud<pcl::PointXYZ>(cloud_xyz,"cloud_xyz");
+              for(int i=0;i<16;i++)
+              for(int j=0;j<100;j++)
+              {
+                 cloud_s->push_back(cloud_xyz->points[2016*i+j]);
+                 cloud_e->push_back(cloud_xyz->points[2016*(i+1)-j]);
+              }
+              pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> clouds_color(cloud_s, 0, 255, 0);
+              pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> cloude_color(cloud_e, 255, 0, 0);
+              pviz.addPointCloud<pcl::PointXYZ>(cloud_s,clouds_color,"cloud_s");
+              pviz.addPointCloud<pcl::PointXYZ>(cloud_e,cloude_color,"cloud_e");
+
+              QString info;
+              QTextStream ts(&info);
+              ts<<"CurFilesNum:"<<idx<<"\n";
+              ui->pcdinfo->append(info);
+          }
+         // qDebug() << itr.prev();
+      }
+  }
+  void Pclwindow::nextpcd_btn_clicked()
+  {
+      if (itr.hasNext())
+      {
+          // qDebug() << itr.next();
+          pviz.removeAllPointClouds();
+          pviz.removeAllShapes();
+          QString ss = itr.next();
+          QString ext = ".pcd";
+          ui->stamp->setText(ss.left(ss.length() - 4));
+          int idx = files.indexOf(ss);
+          ss = pcdpath +"/"+ss;
+          std::cout<<ss.toStdString()<<std::endl;;
+          boost::thread t(boost::bind(pcl::io::loadPCDFile<pcl::PointXYZ>, ss.toStdString(), boost::ref(*cloud_xyz)));
+          t.join();
+          ui->progressBar->setValue(100);
+          // std::vector<int> mapping;
+          // pcl::removeNaNFromPointCloud(*cloud_xyz, *cloud_xyz, mapping);
+          std::cout<<"Done."<<std::endl;
+          std::cout<<"xyz size:"<<cloud_xyz->size()<<std::endl;
+
+          pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_s (new pcl::PointCloud<pcl::PointXYZ>);
+          pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_e (new pcl::PointCloud<pcl::PointXYZ>);
+          if (cloud_xyz->size() > 0)
+          {
+              pviz.addPointCloud<pcl::PointXYZ>(cloud_xyz,"cloud_xyz");
+              ui->prepcd->setEnabled(true);
+              // pviz.addLine(pcl::PointXYZ(2, 0, 0), pcl::PointXYZ(1, 1, 1));
+              // int nan_num =0;
+              // for(int i=0;i<cloud_xyz->size();i++){
+              //   if(pcl_isfinite(cloud_xyz->points[i].x)){
+              //       nan_num++;
+              //       continue;
+              //   }
+              //   // double angle = std::atan2(cloud_xyz->points[i].y,cloud_xyz->points[i].x);
+              //   if(nan_num<100)
+              //   {
+
+              //   }
+              //   //std::cout<<"1:"<<cloud_xyz->points[i]<<std::endl;
+              //   //std::cout<<"2:"<<cloud_xyz->points[cloud_xyz->size()-i]<<std::endl; 
+              // }
+              // pviz.addLine<pcl::PointXYZ>(cloud_xyz->points[i],cloud_xyz->points[cloud_xyz->size()-i],1,0,0,QString::number(i).toStdString());
+              for(int i=0;i<16;i++)
+              for(int j=0;j<100;j++)
+              {
+                 cloud_s->push_back(cloud_xyz->points[2016*i+j]);
+                 cloud_e->push_back(cloud_xyz->points[2016*(i+1)-j]);
+              }
+              std::cout<<"1:"<<cloud_s->size()<<std::endl;
+              std::cout<<"2:"<<cloud_e->size()<<std::endl; 
+              //给点云添加颜色
+              pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> clouds_color(cloud_s, 0, 255, 0);
+              pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> cloude_color(cloud_e, 255, 0, 0);
+              //pcl viewer中添加多个点云
+              pviz.addPointCloud<pcl::PointXYZ>(cloud_s,clouds_color,"cloud_s");
+              pviz.addPointCloud<pcl::PointXYZ>(cloud_e,cloude_color,"cloud_e");
+//              QListIterator<QString> i(files);
+              //int idx = files.indexOf(ss);
+              QString info;
+              QTextStream ts(&info);
+              ts<<"CurFilesNum:"<<idx<<"\n";
+              ui->pcdinfo->append(info);
+
+          }
+      }
+  }
+  void Pclwindow::on_action_2_triggered()
+  {
+      QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*.pcd)"));
+      if (fileName != "")
+      {
+          std::cout<<fileName.toStdString()<<std::endl;;
+          pviz.removeAllPointClouds();
+          pviz.removeAllShapes();
+          ui->widget->setDisabled(true);
+          ui->menuBar->setDisabled(true);
+          boost::thread t(boost::bind(pcl::io::loadPCDFile<pcl::PointXYZ>, fileName.toStdString(), boost::ref(*cloud_xyz)));
+          //for (int i = 0; i <= (int) sec; i++)
+          //{
+          //    ui->progressBar->setValue((int) ((i/sec)*100));
+          //    ui->label->setText(QString::fromStdString("Wait for "+boost::lexical_cast<std::string>(((int)sec)-i)+" sec"));
+              //boost::this_thread::sleep(boost::posix_time::seconds(1)); // wait 1 sec
+          //}
+          t.join();
+          ui->progressBar->setValue(100);
+          ui->widget->setEnabled(true);
+          ui->menuBar->setEnabled(true);
+          if (cloud_xyz->size() > 0)
+          {
+              pviz.addPointCloud<pcl::PointXYZ>(cloud_xyz,"cloud_xyz");
+              ui->progressBar->setValue(0);
+              QFileInfo fi;
+              fi = QFileInfo(fileName);
+              pcdpath = fi.absolutePath();
+              std::cout<<pcdpath.toStdString()<<std::endl;;
+              QDir dir(pcdpath);
+              QStringList nameFilters;
+              nameFilters << "*.pcd";
+              files = dir.entryList(nameFilters, QDir::Files|QDir::Readable, QDir::Name);
+              QListIterator<QString> i(files);
+              itr = i;
+              ui->nextpcd->setEnabled(true);
+          }
+      };
+  }
+
+#+END_SRC
+
+#+NAME: 更新ui
+#+begin_src bash
+uic pclwindow.ui -o ui_pclwindow.h #如果不成功加sudo 
+#+end_src
+
+#+RESULTS: 更新ui
+
+#+NAME: 更新代码和编译
+#+begin_src bash :results verbatim
+#qmake test.pro //cmake file 生成出来,采用cmake编译方式
+cmake .>/dev/null 2>&1
+make
+#+end_src
+
+#+RESULTS: 更新代码和编译
+: [ 20%] Automatic moc, uic and rcc for target test
+: [ 20%] Built target test_automoc
+: Scanning dependencies of target test
+: [ 40%] Building CXX object CMakeFiles/test.dir/pclwindow.cpp.o
+: [ 60%] Linking CXX executable test
+: [100%] Built target test
+
+#+NAME: 运行
+#+begin_src bash :results verbatim
+./test
+#+end_src
+
+#+RESULTS: 运行
+
+

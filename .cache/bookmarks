@@ -1,0 +1,45 @@
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("mnt"
+ (filename . "/mnt/")
+ (front-context-string . ".00_盟识事务\n  drwxr")
+ (rear-context-string . " 0 4月  30 09:55 ")
+ (position . 246))
+("org-capture-last-stored-marker"
+ (filename . "/media/maxsense/6605124a-f3c6-4ee5-97f8-0f616f6890f0/tong/SparkleShare/mynotes/GTD/2020_task.org")
+ (front-context-string . "** TODO [#B]  em")
+ (rear-context-string . "<2020-10-12 一>\n\n")
+ (position . 9871))
+("org-refile-last-stored"
+ (filename . "/media/maxsense/6605124a-f3c6-4ee5-97f8-0f616f6890f0/tong/SparkleShare/mynotes/GTD/2020_task.org")
+ (front-context-string . "** TODO [#B]  em")
+ (rear-context-string . "<2020-10-12 一>\n\n")
+ (position . 9871))
+("org-capture-last-stored"
+ (filename . "~/SparkleShare/mynotes/GTD/2020_task.org")
+ (front-context-string . "** TODO [#A]  ke")
+ (rear-context-string . "<2020-12-09 三>\n\n")
+ (position . 4989))
+("autonomous_driving"
+ (filename . "~/codes/autonomous_driving/")
+ (front-context-string . "src\n  drwxrwxr-x")
+ (rear-context-string . "96 4月   9 16:36 ")
+ (position . 693))
+("3rdparty"
+ (filename . "~/3rdparty/")
+ (front-context-string . "WASP_1_1\n  drwxr")
+ (rear-context-string . "96 6月   5 10:11 ")
+ (position . 3771))
+("src"
+ (filename . "~/codes/autonomous_driving/src/")
+ (front-context-string . "control\n  -rwxrw")
+ (rear-context-string . "96 12月 11 10:08 ")
+ (position . 448))
+("mynotes"
+ (filename . "/media/maxsense/6605124a-f3c6-4ee5-97f8-0f616f6890f0/tong/SparkleShare/mynotes/")
+ (front-context-string . "eigen\n  drwxrwxr")
+ (rear-context-string . "96 11月 14  2019 ")
+ (position . 708))
+)

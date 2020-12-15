@@ -1,0 +1,14 @@
+/home/maxsense/codes/autonomous_driving/src/system/ms_demo_control/start_pjtech.sh
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!system!ms_demo_control!start_pjtech.sh#
+/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/CMakeLists.txt
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!perception!ros!driver!gnss_driver!xwyd_gnss_driver!CMakeLists.txt#
+/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/launch/tuan_driver.launch
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!common!ros!ms_common_launch!launch!tuan_driver.launch#
+/home/maxsense/codes/autonomous_driving/src/system/ms_demo_control/start_vehicle.sh
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!system!ms_demo_control!start_vehicle.sh#
+/home/maxsense/codes/autonomous_driving/src/perception/ros/driver/gnss_driver/xwyd_gnss_driver/launch/touran_xwyd_gnss.launch
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!perception!ros!driver!gnss_driver!xwyd_gnss_driver!launch!touran_xwyd_gnss.launch#
+/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/launch/localization_msf_new.launch
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!common!ros!ms_common_launch!launch!localization_msf_new.launch#
+/home/maxsense/codes/autonomous_driving/src/common/ros/ms_common_launch/launch/localization_debug_tuan_new_xwyd.launch
+/home/maxsense/.emacs.d/.cache/auto-save/site/#!home!maxsense!codes!autonomous_driving!src!common!ros!ms_common_launch!launch!localization_debug_tuan_new_xwyd.launch#

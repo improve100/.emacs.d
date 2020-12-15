@@ -1,0 +1,39 @@
+#+startup: showall
+#+title: go开发环境搭建
+* go 安装
+
+1. 获取最新的软件包源，并添加至当前的 apt 库
+sudo add-apt-repository ppa:longsleep/golang-backports
+
+2. 更新 apt 库
+sudo apt-get update
+
+1. 安装 go
+sudo apt-get install golang-go
+
+1. 鉴定是否安装成功
+#+begin_src bash :results verbatim
+go version
+#+end_src
+
+#+RESULTS:
+
+1. 运行 go env 查看 GOPATH 路径
+
+2. 在 GOPATH 路径下 创建一个 hello.go 文件
+#+BEGIN_SRC go :tangle ~/go/hello.go   :tangle-mode (identity #o755) :padline no
+package main
+import "fmt" 
+func main() {
+    fmt.Printf("hello go 世界\n")
+}
+
+#+END_SRC
+7. 测试 
+#+begin_src bash :results verbatim
+go run ~/go/hello.go
+#+END_SRC
+
+#+RESULTS:
+: hello go 世界
+
